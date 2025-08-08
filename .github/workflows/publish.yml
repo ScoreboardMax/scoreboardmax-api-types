@@ -62,15 +62,17 @@ jobs:
       id: version-bump
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
       run: |
-        # For now, default to patch. 
+        # For now, default to patch.
         echo "bump=patch" >> $GITHUB_OUTPUT
         echo "Using patch version bump"
 
     - name: Bump version and publish
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
+      id: bump-version
       run: |
         if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ]; then
           echo "First publish - version will be 1.0.0"
+          NEW_VERSION="1.0.0"
         else
           # Bump version
           npm version ${{ steps.version-bump.outputs.bump }} --no-git-tag-version
@@ -82,6 +84,10 @@ jobs:
           git commit -m "Bump version to $NEW_VERSION"
           git tag "v$NEW_VERSION"
         fi
+        
+        # Output the new version for later steps
+        echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "New version: $NEW_VERSION"
         
         # Publish to NPM
         npm publish
@@ -99,8 +105,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ steps.bump-version.outputs.new-version || '1.0.0' }}
-        release_name: v${{ steps.bump-version.outputs.new-version || '1.0.0' }}
+        tag_name: v${{ steps.bump-version.outputs.new-version }}
+        release_name: v${{ steps.bump-version.outputs.new-version }}
         body: |
           Automated release of ScoreboardMax API types
           
@@ -111,8 +117,8 @@ jobs:
     - name: Summary
       run: |
         if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ] || [ "${{ steps.check-changes.outputs.should-publish }}" == "true" ]; then
-          echo "Successfully published @scoreboardmax/api-types to NPM"
-          echo "Developers can install with: npm install @scoreboardmax/api-types"
+          echo "✅ Successfully published @scoreboardmax/api-types to NPM"
+          echo "Install with: npm install @scoreboardmax/api-types"
         else
-          echo "ℹNo changes detected, skipping publish"
+          echo "ℹ️ No changes detected, skipping publish"
         fi
