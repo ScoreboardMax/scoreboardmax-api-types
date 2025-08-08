@@ -4,7 +4,7 @@
  * This file contains type definitions for API consumers.
  * These types are automatically generated from the ScoreboardMax API source code.
  * 
- * @version Generated on 2025-08-08T16:23:10.791Z
+ * @version Generated on 2025-08-08T16:54:59.272Z
  */
 
 export enum ApiAction {
