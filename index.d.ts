@@ -512,6 +512,16 @@ export interface DataExtractResponse {
 
 export interface DataRow extends Array<string> { }
 
+export interface Event {
+  eventId: string;
+  accountId: string;
+  dateCreated: string;
+  resource: string;
+  resourceUri: string;
+  subscriptionResourceUri: string;
+  data: object | null;
+}
+
 export interface EventResponse {
   object: string;
   eventId: string;
@@ -653,6 +663,22 @@ export interface OverlayResponse {
     color?: string;
 }
 
+export interface Plan {
+    planId: PlanId;
+    resetScoreboards: boolean;
+    apiAccess: boolean;
+    maxScoreboards: number;
+    maxActiveScoreboards: number;
+    maxConcurrentDevices: number;
+    maxRosters: number;
+    maxSponsors: number;
+    maxTeams: number;
+    maxUsers: number;
+    maxPresets: number;
+    maxStorage: number;
+    accountLogo: boolean;
+}
+
 export interface PlanResponse extends Plan {
 }
 
@@ -777,6 +803,13 @@ export interface RosterResponse {
   dateModified: string;
 }
 
+export interface ScoreboardActivation {
+    accountId: string;
+    scoreboardId: string;
+    dateCreated: string;
+    ttl: number;
+}
+
 export interface ScoreboardActivationListResponse {
     url: string;
     uri: string;
@@ -855,6 +888,11 @@ export interface ScoreboardTeamBaseResponse {
     rosterId: string | null;
     roster: string | RosterResponse | null;
     reference: string;
+}
+
+export interface ServerTime {
+    now: string;
+    nowTimestamp: number;
 }
 
 export interface ServerTimeResponse extends ServerTime {
@@ -1075,6 +1113,11 @@ export interface UserResponse {
   dateCreated: string;
   dateModified: string;
   dateLastActivity: string | null;
+}
+
+export interface UserResponseAdmin extends UserResponse {
+  isOwner: boolean;
+  isAdmin: boolean;
 }
 
 export interface UserUpdateRequest {
