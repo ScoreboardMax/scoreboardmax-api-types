@@ -16,12 +16,6 @@
     "dist/"
   ],
   "scripts": {
-    "build": "npm run build:cjs && npm run build:esm && npm run copy-types",
-    "build:cjs": "tsc --module commonjs --outDir dist/cjs && mv dist/cjs/index.js dist/index.cjs",
-    "build:esm": "tsc --module es6 --outDir dist/esm && mv dist/esm/index.js dist/index.mjs",
-    "copy-types": "cp index.d.ts dist/index.d.ts",
-    "clean": "rm -rf dist/",
-    "prepublishOnly": "npm run clean && npm run build",
     "test": "echo \"No tests for type definitions\" && exit 0"
   },
   "repository": {
