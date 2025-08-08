@@ -512,16 +512,6 @@ export interface DataExtractResponse {
 
 export interface DataRow extends Array<string> { }
 
-export interface Event {
-  eventId: string;
-  accountId: string;
-  dateCreated: string;
-  resource: string;
-  resourceUri: string;
-  subscriptionResourceUri: string;
-  data: object | null;
-}
-
 export interface EventResponse {
   object: string;
   eventId: string;
