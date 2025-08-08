@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/ScoreboardMax/scoreboardmax-api-types/issues"
   },
-  "homepage": "https://github.com/ScoreboardMax/scoreboardmax-api-types#readme",
+  "homepage": "https://scoreboardmax.com/api/docs",
   "publishConfig": {
     "access": "public"
   }
