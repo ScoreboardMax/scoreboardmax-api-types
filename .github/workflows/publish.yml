@@ -24,6 +24,9 @@ jobs:
         node-version: '20'
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Install TypeScript
+      run: npm install -g typescript
+
     - name: Configure git
       run: |
         git config user.name "github-actions[bot]"
@@ -66,6 +69,38 @@ jobs:
         echo "bump=patch" >> $GITHUB_OUTPUT
         echo "Using patch version bump"
 
+    - name: Build dual packages
+      if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
+      run: |
+        echo "Building CommonJS and ES6 modules..."
+        
+        # Create dist directory
+        mkdir -p dist
+        
+        # Build CommonJS version
+        echo "Building CommonJS..."
+        tsc --module commonjs --outDir dist/cjs --declaration false index.d.ts
+        mv dist/cjs/index.js dist/index.cjs
+        
+        # Build ES6 version
+        echo "Building ES6..."
+        tsc --module es6 --outDir dist/esm --declaration false index.d.ts
+        mv dist/esm/index.js dist/index.mjs
+        
+        # Copy types
+        cp index.d.ts dist/index.d.ts
+        
+        # Clean up temp directories
+        rm -rf dist/cjs dist/esm
+        
+        # Verify builds
+        echo "Build verification:"
+        ls -la dist/
+        echo "CommonJS sample:"
+        head -5 dist/index.cjs
+        echo "ES6 sample:"
+        head -5 dist/index.mjs
+
     - name: Bump version and publish
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
       id: bump-version
@@ -106,14 +141,19 @@ jobs:
           --title "v${{ steps.bump-version.outputs.new-version }}" \
           --notes "Automated release of ScoreboardMax API types
 
-        Generated from API repository changes."
+        Generated from API repository changes.
+        
+        📦 Dual package support:
+        - CommonJS: \`require('@scoreboardmax/api-types')\`
+        - ES6: \`import {} from '@scoreboardmax/api-types'\`"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Summary
       run: |
         if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ] || [ "${{ steps.check-changes.outputs.should-publish }}" == "true" ]; then
-          echo "✅ Successfully published @scoreboardmax/api-types to NPM"
+          echo "✅ Successfully published @scoreboardmax/api-types to NPM with dual builds"
+          echo "📦 Package now supports both CommonJS and ES6 modules"
           echo "Install with: npm install @scoreboardmax/api-types"
         else
           echo "ℹ️ No changes detected, skipping publish"
