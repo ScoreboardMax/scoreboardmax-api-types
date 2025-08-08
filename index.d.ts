@@ -4,7 +4,7 @@
  * This file contains type definitions for API consumers.
  * These types are automatically generated from the ScoreboardMax API source code.
  * 
- * @version Generated on 2025-08-08T05:09:09.907Z
+ * @version Generated on 2025-08-08T15:49:48.968Z
  */
 
 export enum ApiAction {
@@ -158,6 +158,13 @@ export enum FootballPeriod {
     Overtime = "overtime",
 }
 
+export enum MagicLinkType {
+    SignIn = "signIn",
+    ScoreboardGuest = "scoreboardGuest",
+    UserInvite = "userInvite",
+    ScoreboardView = "scoreboardView",
+}
+
 export enum MetaMessageType {
     ScoreboardReset = "scoreboardReset",
     ScoreboardRefresh = "scoreboardRefresh",
@@ -262,6 +269,23 @@ export interface AccountResponse {
   token?: string;
 }
 
+export interface Auth {
+  authId: string;
+  mask: string;
+  accountId: string;
+  userId?: string;
+  type: AuthType;
+  isAdmin: boolean;
+  description?: string | null;
+  permissions: Permissions;
+  dateCreated: string;
+  dateModified: string;
+  dateExpires?: string;
+  dateLastUsed?: string;
+  dateLastUserActivityUpdate?: string;
+  ttl?: number;
+}
+
 export interface AuthListResponse {
   url: string;
   uri: string;
@@ -294,6 +318,12 @@ export interface AuthResponse {
   dateNow: string;
   type: AuthType;
   token?: string;
+}
+
+export interface AuthSignInRequest {
+  email: string;
+  password: string;
+  accountId?: string;
 }
 
 export interface BaseballDataRequest {
@@ -351,6 +381,18 @@ export interface BaseballScoreboardTeamResponse extends ScoreboardTeamBaseRespon
     isHomeTeam: boolean;
 }
 
+export interface BaseballSettings extends ScoreboardSettingsBase {
+    showCount: boolean;
+    showBaseRunners: boolean;
+    showLineScore: boolean;
+    showPitchCount: boolean;
+    showBattingAverage: boolean;
+    pitchClockLength?: number; 
+    showPitchClock: boolean;
+    showPitchClockWhenLow: boolean;
+    enableClockAutomations: boolean;
+}
+
 export interface BaseballSettingsRequest extends BaseballSettings {
 }
 
@@ -390,10 +432,52 @@ export interface BasketballScoreboardTeamResponse extends ScoreboardTeamBaseResp
     doubleBonus: boolean;
 }
 
+export interface BasketballSettings extends ScoreboardSettingsBase {
+    periodLength: number; 
+    shotClockLength?: number; 
+    shotClockSecondaryLength?: number; 
+    halfLength: number; 
+    showGameClock: boolean;
+    showShotClock: boolean;
+    showTimeouts: boolean;
+    gamePeriods: BasketballGamePeriods;
+    timeoutAllocation?: BasketballTimeoutAllocation;
+    timeoutsFirstHalf?: number;
+    timeoutsSecondHalf?: number;
+    timeoutsTotal?: number;
+    showTeamFouls: boolean;
+    hasDoubleBonus: boolean;
+    bonusThreshold?: number;
+    doubleBonusThreshold?: number;
+    enableClockAutomations: boolean;
+    showShotClockWhenLow: boolean;
+}
+
 export interface BasketballSettingsRequest extends BasketballSettings {
 }
 
 export interface BasketballSettingsResponse extends BasketballSettings {
+}
+
+export interface CheckoutSessionRequest {
+    priceId: string;
+    currency: string;
+}
+
+export interface CheckoutSessionResponse {
+    sessionId: string;
+    redirectUrl: string;
+}
+
+export interface Clock {
+    clockId: string;
+    scoreboardId: string;
+    accountId: string;
+    seconds: number | null;
+    running: boolean;
+    ascending: boolean;
+    asOfTimestamp: number;
+    stopAt?: number;
 }
 
 export interface ClockListResponse {
@@ -428,6 +512,16 @@ export interface DataExtractResponse {
 }
 
 export interface DataRow extends Array<string> { }
+
+export interface Event {
+  eventId: string;
+  accountId: string;
+  dateCreated: string;
+  resource: string;
+  resourceUri: string;
+  subscriptionResourceUri: string;
+  data: object | null;
+}
 
 export interface EventResponse {
   object: string;
@@ -497,10 +591,63 @@ export interface FootballScoreboardTeamResponse extends ScoreboardTeamBaseRespon
     possession: boolean;
 }
 
+export interface FootballSettings extends ScoreboardSettingsBase {
+    periodLength: number; 
+    halfLength: number; 
+    playClockLength?: number;
+    playClockSecondaryLength?: number;
+    timeoutsPerHalf?: number;
+    showGameClock: boolean;
+    showPlayClock: boolean;
+    showTimeouts: boolean;
+    showPossession: boolean;
+    downAndDistanceDisplay: DownAndDistanceDisplay;
+    hideFlagAfter: number;
+    clockStopsOnFirstDown: boolean;
+    enableMercyRule: boolean;
+    enableClockAutomations: boolean;
+    showPlayClockWhenLow: boolean;
+}
+
 export interface FootballSettingsRequest extends FootballSettings {
 }
 
 export interface FootballSettingsResponse extends FootballSettings {
+}
+
+export interface MagicLinkScoreboardGuestRequest {
+    scoreboardId: string;
+    expiresInHours: number;
+}
+
+export interface MetaMessage {
+    type: MetaMessageType;
+    accountId: string;
+    subscriptionResource: string;
+    subscriptionResourceUri: string;
+    dateCreated: string;
+    message: string | null;
+}
+
+export interface NewAccountRequest {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+export interface OAuthBindingRequest {
+    messageCipher: string;
+}
+
+export interface OAuthResponse {
+    auth?: AuthResponse;
+    userCredentials?: UserCredentialsResponse;
+    oAuthProvider: OAuthProvider;
+    oAuthProviderId: string;
+    oAuthProviderEmail: string;
+    oAuthProviderName: string;
+    messageCipher?: string;
+    dateNow: string;
 }
 
 export interface OverlayRequest {
@@ -579,6 +726,10 @@ export interface PlayerSummaryResponse {
     imageMediumUrl: string | null;
 }
 
+export interface PortalSessionResponse {
+    redirectUrl: string;
+}
+
 export interface PresetListResponse {
     url: string;
     uri: string;
@@ -635,6 +786,7 @@ export interface RosterResponse {
   accountId: string;
   dateCreated: string;
   dateModified: string;
+  testProperty?: string; 
 }
 
 export interface ScoreboardActivationListResponse {
@@ -750,6 +902,17 @@ export interface SoccerScoreboardTeamResponse extends ScoreboardTeamBaseResponse
     penaltyCard?: SoccerPenaltyCardResponse;
 }
 
+export interface SoccerSettings extends ScoreboardSettingsBase {
+    periodLength: number; 
+    halfLength: number; 
+    extraTimeLength: number; 
+    showGameClock: boolean;
+    gamePeriods: SoccerGamePeriods;
+    extraTimeLabel: ExtraTimeLabel;
+    hasStoppageTime: boolean;
+    hidePenaltyCardAfter: number; 
+}
+
 export interface SoccerSettingsRequest extends SoccerSettings {
 }
 
@@ -804,6 +967,17 @@ export interface SponsorSummaryResponse {
     imageUrl: string | null;
     imagePreviewUrl: string | null;
     imageMediumUrl: string | null;
+}
+
+export interface SupportEmailRequest {
+    from: string;
+    subject: string;
+    name: string;
+    body: string;
+}
+
+export interface SupportEmailResponse {
+    dateCreated: string;
 }
 
 export interface TeamListResponse {
@@ -907,6 +1081,11 @@ export interface UserResponse {
   dateLastActivity: string | null;
 }
 
+export interface UserUpdateRequest {
+  name?: string;
+  permissions?: Permissions;
+}
+
 export interface VolleyballDataRequest {
     set: number | null;
     team1: VolleyballScoreboardTeamRequest;
@@ -940,6 +1119,13 @@ export interface VolleyballScoreboardTeamResponse extends ScoreboardTeamBaseResp
     finalSetScores: (number | null)[];
 }
 
+export interface VolleyballSettings extends ScoreboardSettingsBase {
+    sets: number;
+    timeoutsPerSet?: number;
+    showTimeouts: boolean;
+    showServing: boolean;
+}
+
 export interface VolleyballSettingsRequest extends VolleyballSettings {
 }
 
@@ -954,6 +1140,11 @@ export interface WebsocketConnectionIdRequest {
 export interface WebsocketConnectionIdResponse {
     connectionId: string;
     dateCreated: string;
+}
+
+export interface WebsocketHeartbeatCommand {
+    action: "sendmessage";
+    operation: WebsocketOperation.SendHeartbeat;
 }
 
 export interface WebsocketMessage {
@@ -1016,6 +1207,22 @@ export interface WrestlingScoreboardTeamResponse extends ScoreboardTeamBaseRespo
     matchScore: number;
     wrestler: PlayerSummaryResponse | null;
     bandColor: "red" | "blue" | "green" | null;
+}
+
+export interface WrestlingSettings extends ScoreboardSettingsBase {
+    style: WrestlingStyle;
+    weightType: "kg" | "lb";
+    meetType: WrestlingMeetType;
+    showPeriodClock: boolean;
+    periodLength: number; 
+    periodCount: number;
+    initialPeriodLength?: number; 
+    suddenVictoryLength?: number; 
+    tieBreakerLength?: number; 
+    ultimateTieBreakerLength?: number; 
+    hasUltimateTieBreaker: boolean;
+    bandColors: Array<"red" | "green" | "blue"> | [];
+    trackTeamScores: boolean;
 }
 
 export interface WrestlingSettingsRequest extends WrestlingSettings {
