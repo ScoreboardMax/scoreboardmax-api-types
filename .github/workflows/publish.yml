@@ -3,7 +3,7 @@ name: Publish to NPM
 on:
   push:
     branches: [ main ]
-    paths: [ 'index.d.ts' ]
+    paths: [ 'index.ts' ]
 
 permissions:
   contents: write
@@ -47,9 +47,9 @@ jobs:
       id: check-changes
       if: steps.check-first.outputs.first-publish == 'false'
       run: |
-        # Compare current index.d.ts with previous commit
-        if git show HEAD~1:index.d.ts > previous.d.ts 2>/dev/null; then
-          if diff -q index.d.ts previous.d.ts > /dev/null; then
+        # Compare current index.ts with previous commit
+        if git show HEAD~1:index.ts > previous.ts 2>/dev/null; then
+          if diff -q index.ts previous.ts > /dev/null; then
             echo "No actual changes to types content"
             echo "should-publish=false" >> $GITHUB_OUTPUT
           else
@@ -79,16 +79,16 @@ jobs:
         
         # Build CommonJS version
         echo "Building CommonJS..."
-        tsc --module commonjs --outDir dist/cjs --declaration false index.d.ts
+        tsc --module commonjs --outDir dist/cjs --declaration true index.ts
         mv dist/cjs/index.js dist/index.cjs
         
         # Build ES6 version
         echo "Building ES6..."
-        tsc --module es6 --outDir dist/esm --declaration false index.d.ts
+        tsc --module es6 --outDir dist/esm --declaration true index.ts
         mv dist/esm/index.js dist/index.mjs
         
-        # Copy types
-        cp index.d.ts dist/index.d.ts
+        # Copy types from either build (they're the same)
+        cp dist/cjs/index.d.ts dist/index.d.ts
         
         # Clean up temp directories
         rm -rf dist/cjs dist/esm
