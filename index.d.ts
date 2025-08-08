@@ -169,6 +169,16 @@ export enum MetaMessageType {
     ScoreboardRefresh = "scoreboardRefresh",
 }
 
+export enum OAuthProvider {
+    Google = "google",
+}
+
+export enum PlanId {
+    Basic = "basic",
+    Plus = "plus",
+    Pro = "pro",
+}
+
 export enum ScoreboardCode {
   Football = "fb",
   Basketball = "bb",
