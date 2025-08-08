@@ -1,0 +1,118 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'index.d.ts' ]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Check if this is the first publish
+      id: check-first
+      run: |
+        if [ ! -f package.json ]; then
+          echo "first-publish=true" >> $GITHUB_OUTPUT
+          echo "This appears to be the first publish (no package.json)"
+        else
+          echo "first-publish=false" >> $GITHUB_OUTPUT
+          echo "package.json exists, checking for changes"
+        fi
+
+    - name: Check for actual type changes
+      id: check-changes
+      if: steps.check-first.outputs.first-publish == 'false'
+      run: |
+        # Compare current index.d.ts with previous commit
+        if git show HEAD~1:index.d.ts > previous.d.ts 2>/dev/null; then
+          if diff -q index.d.ts previous.d.ts > /dev/null; then
+            echo "No actual changes to types content"
+            echo "should-publish=false" >> $GITHUB_OUTPUT
+          else
+            echo "Types content has changed"
+            echo "should-publish=true" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "Previous version not found, treating as new"
+          echo "should-publish=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Determine version bump type
+      id: version-bump
+      if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
+      run: |
+        # For now, default to patch. 
+        echo "bump=patch" >> $GITHUB_OUTPUT
+        echo "Using patch version bump"
+
+    - name: Bump version and publish
+      if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
+      run: |
+        if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ]; then
+          echo "First publish - version will be 1.0.0"
+        else
+          # Bump version
+          npm version ${{ steps.version-bump.outputs.bump }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "Bumped to version $NEW_VERSION"
+          
+          # Commit the version change
+          git add package.json
+          git commit -m "Bump version to $NEW_VERSION"
+          git tag "v$NEW_VERSION"
+        fi
+        
+        # Publish to NPM
+        npm publish
+        
+        # Push the commit and tag (if not first publish)
+        if [ "${{ steps.check-first.outputs.first-publish }}" == "false" ]; then
+          git push origin main --tags
+        fi
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Create GitHub release
+      if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.bump-version.outputs.new-version || '1.0.0' }}
+        release_name: v${{ steps.bump-version.outputs.new-version || '1.0.0' }}
+        body: |
+          Automated release of ScoreboardMax API types
+          
+          Generated from API repository changes.
+        draft: false
+        prerelease: false
+
+    - name: Summary
+      run: |
+        if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ] || [ "${{ steps.check-changes.outputs.should-publish }}" == "true" ]; then
+          echo "Successfully published @scoreboardmax/api-types to NPM"
+          echo "Developers can install with: npm install @scoreboardmax/api-types"
+        else
+          echo "ℹNo changes detected, skipping publish"
+        fi
