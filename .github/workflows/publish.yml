@@ -62,7 +62,7 @@ jobs:
       id: version-bump
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
       run: |
-        # For now, default to patch.
+        # For now, default to patch 
         echo "bump=patch" >> $GITHUB_OUTPUT
         echo "Using patch version bump"
 
@@ -101,18 +101,14 @@ jobs:
 
     - name: Create GitHub release
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
-      uses: actions/create-release@v1
+      run: |
+        gh release create "v${{ steps.bump-version.outputs.new-version }}" \
+          --title "v${{ steps.bump-version.outputs.new-version }}" \
+          --notes "Automated release of ScoreboardMax API types
+
+        Generated from API repository changes."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.bump-version.outputs.new-version }}
-        release_name: v${{ steps.bump-version.outputs.new-version }}
-        body: |
-          Automated release of ScoreboardMax API types
-          
-          Generated from API repository changes.
-        draft: false
-        prerelease: false
 
     - name: Summary
       run: |
