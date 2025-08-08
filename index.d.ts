@@ -4,7 +4,7 @@
  * This file contains type definitions for API consumers.
  * These types are automatically generated from the ScoreboardMax API source code.
  * 
- * @version Generated on 2025-08-08T04:13:03.939Z
+ * @version Generated on 2025-08-08T05:05:08.775Z
  */
 
 export enum ApiAction {
@@ -635,6 +635,7 @@ export interface RosterResponse {
   accountId: string;
   dateCreated: string;
   dateModified: string;
+  testDeploy?: string; 
 }
 
 export interface ScoreboardActivationListResponse {
