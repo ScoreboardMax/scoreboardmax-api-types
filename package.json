@@ -1,0 +1,35 @@
+{
+  "name": "@scoreboardmax/api-types",
+  "version": "1.0.0",
+  "description": "TypeScript definitions for ScoreboardMax API",
+  "main": "index.d.ts",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "echo \"No tests for type definitions\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ScoreboardMax/scoreboardmax-api-types.git"
+  },
+  "keywords": [
+    "typescript",
+    "api",
+    "scoreboardmax",
+    "types",
+    "definitions",
+    "scoreboard",
+    "sports"
+  ],
+  "author": "ScoreboardMax",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ScoreboardMax/scoreboardmax-api-types/issues"
+  },
+  "homepage": "https://github.com/ScoreboardMax/scoreboardmax-api-types#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
