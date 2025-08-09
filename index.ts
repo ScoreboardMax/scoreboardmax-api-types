@@ -522,6 +522,14 @@ export interface DataExtractResponse {
 
 export interface DataRow extends Array<string> { }
 
+export interface ErrorResponse {
+  error: boolean;
+  code: ErrorCode;
+  statusCode: number;
+  reference: string;
+  message: string;
+}
+
 export interface Event {
   eventId: string;
   accountId: string;
@@ -1294,5 +1302,3 @@ export type ResourcePermissions = {
 }
 
 export {};
-
-
