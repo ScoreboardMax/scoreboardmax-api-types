@@ -1,6 +1,6 @@
-# ScoreboardMax API Type Definitions
+# ScoreboardMax API Types & Constants
 
-This package provides TypeScript type definitions for developers integrating with the ScoreboardMax API. All types are automatically generated from the official ScoreboardMax API source code to ensure accuracy and consistency.
+This package provides TypeScript types and runtime constants for developers integrating with the ScoreboardMax API. All definitions are automatically generated from the official ScoreboardMax API source code to ensure accuracy and consistency.
 
 **API Documentation:** [https://scoreboardmax.com/api/docs](https://scoreboardmax.com/api/docs)
 
@@ -24,10 +24,47 @@ bun add @scoreboardmax/api-types
 
 ## Usage
 
-### Basic Import
+### TypeScript
 ```typescript
-import { ScoreboardRequest, ScoreboardResponse } from "@scoreboardmax/api-types";
+// Import types for API requests and responses
+import { ScoreboardRequest, ScoreboardResponse, ScoreboardType } from "@scoreboardmax/api-types";
+
+// Import runtime constants and enums
+import { WebsocketOperation, WebsocketMessageType } from "@scoreboardmax/api-types";
+
+// Use in your application
+const request: ScoreboardRequest = {
+  name: "Varsity Football",
+  type: ScoreboardType.Basketball,
+  data: { /* ... */ }
+};
+
+// Runtime constants work in conditionals
+if (operation === WebsocketOperation.SendHeartbeat) {
+  // Handle heartbeat
+}
 ```
+
+### JavaScript
+```javascript
+// CommonJS
+const { WebsocketOperation, ScoreboardType } = require("@scoreboardmax/api-types");
+
+// ES6 modules
+import { WebsocketOperation, ScoreboardType } from "@scoreboardmax/api-types";
+
+// Use runtime constants
+if (body.operation === WebsocketOperation.GetConnectionId) {
+  // Handle connection request
+}
+```
+
+## What's Included
+
+- **TypeScript Types**: Interfaces for API requests and responses
+- **Runtime Constants**: Enums for operations, message types, and scoreboard types
+- **Full Type Safety**: Complete IntelliSense support for TypeScript projects
+- **Universal Compatibility**: Works with both CommonJS and ES6 module systems
 
 ## Contributing
 
@@ -35,7 +72,7 @@ This package is automatically generated from the ScoreboardMax API schema. If yo
 
 1. Check if the issue exists in the API documentation
 2. Report issues at: [GitHub Issues](https://github.com/scoreboardmax/api-types/issues)
-3. For API-related issues, [contact ScoreboardMax support ](https://scoreboardmax.com/#contact)
+3. For API-related issues, [contact ScoreboardMax support](https://scoreboardmax.com/#contact)
 
 ## License
 
