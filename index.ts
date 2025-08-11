@@ -632,6 +632,18 @@ export interface FootballSettingsRequest extends FootballSettings {
 export interface FootballSettingsResponse extends FootballSettings {
 }
 
+export interface MagicLinkResponse {
+    object: string;
+    magicLinkId: string;
+    type: MagicLinkType;
+    url: string;
+    uri: string;
+    dateCreated: string;
+    dateExpires?: string;
+    dateLastUsed?: string;
+    token?: string;
+}
+
 export interface MagicLinkScoreboardGuestRequest {
     scoreboardId: string;
     expiresInHours: number;
