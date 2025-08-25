@@ -6,6 +6,30 @@
  * 
  */
 
+export const isBaseballData = (data: any): data is BaseballData => {
+  return data.type === ScoreboardType.Baseball;
+}
+
+export const isBasketballData = (data: any): data is BasketballData => {
+  return data.type === ScoreboardType.Basketball;
+}
+
+export const isFootballData = (data: any): data is FootballData => {
+  return data.type === ScoreboardType.Football;
+}
+
+export const isSoccerData = (data: any): data is SoccerData => {
+  return data.type === ScoreboardType.Soccer;
+}
+
+export const isVolleyballData = (data: any): data is VolleyballData => {
+  return data.type === ScoreboardType.Volleyball;
+}
+
+export const isWrestlingData = (data: any): data is WrestlingData => {
+  return data.type === ScoreboardType.Wrestling;
+}
+
 export enum ApiAction {
     Create = "create",
     Read = "read",
