@@ -6,27 +6,27 @@
  * 
  */
 
-export const isBaseballData = (data: any): data is BaseballData => {
+export const isBaseballData = (data: any): data is BaseballDataResponse => {
   return data.type === ScoreboardType.Baseball;
 }
 
-export const isBasketballData = (data: any): data is BasketballData => {
+export const isBasketballData = (data: any): data is BasketballDataResponse => {
   return data.type === ScoreboardType.Basketball;
 }
 
-export const isFootballData = (data: any): data is FootballData => {
+export const isFootballData = (data: any): data is FootballDataResponse => {
   return data.type === ScoreboardType.Football;
 }
 
-export const isSoccerData = (data: any): data is SoccerData => {
+export const isSoccerData = (data: any): data is SoccerDataResponse => {
   return data.type === ScoreboardType.Soccer;
 }
 
-export const isVolleyballData = (data: any): data is VolleyballData => {
+export const isVolleyballData = (data: any): data is VolleyballDataResponse => {
   return data.type === ScoreboardType.Volleyball;
 }
 
-export const isWrestlingData = (data: any): data is WrestlingData => {
+export const isWrestlingData = (data: any): data is WrestlingDataResponse => {
   return data.type === ScoreboardType.Wrestling;
 }
 
