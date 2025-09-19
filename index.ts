@@ -155,6 +155,7 @@ export enum ErrorCode {
   UserCredentialsInUse = "UserCredentialsInUse",
   AccountEmailInUse = "AccountEmailInUse",
   IncompatibleState = "IncompatibleState",
+  VersionConflict = "VersionConflict",
   UnspecifiedError = "UnspecifiedError",
 }
 
@@ -887,6 +888,7 @@ export interface ScoreboardListResponse {
 export interface ScoreboardRequest {
   name: string | null;
   type: ScoreboardType;
+  version: number;
   data: BasketballDataRequest | FootballDataRequest | VolleyballDataRequest | SoccerDataRequest | BaseballDataRequest | WrestlingDataRequest;
 }
 
@@ -909,6 +911,7 @@ export interface ScoreboardResponse {
   currentServerTimestamp: number;
   clocks: ClockListResponse | string;
   overlay: OverlayResponse | string;
+  version: number;
 }
 
 export interface ScoreboardSettingsBase {
