@@ -667,6 +667,7 @@ export interface MagicLinkResponse {
     dateExpires?: string;
     dateLastUsed?: string;
     token?: string;
+    code?: string;
 }
 
 export interface MagicLinkScoreboardGuestRequest {
