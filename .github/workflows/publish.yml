@@ -7,7 +7,8 @@ on:
   workflow_dispatch:     
 
 permissions:
-  contents: write
+  id-token: write      # Required for OIDC
+  contents: write      # Keep this for git operations
 
 jobs:
   publish:
@@ -24,6 +25,9 @@ jobs:
       with:
         node-version: '20'
         registry-url: 'https://registry.npmjs.org'
+
+    - name: Update npm
+      run: npm install -g npm@latest
 
     - name: Install TypeScript
       run: npm install -g typescript
@@ -125,15 +129,14 @@ jobs:
         echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
         echo "New version: $NEW_VERSION"
         
-        # Publish to NPM
-        npm publish
+        # Publish to NPM using OIDC (no token needed)
+        npm publish --provenance --access public
         
         # Push the commit and tag (if not first publish)
         if [ "${{ steps.check-first.outputs.first-publish }}" == "false" ]; then
           git push origin main --tags
         fi
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Remove the NODE_AUTH_TOKEN env var - no longer needed with OIDC
 
     - name: Create GitHub release
       if: steps.check-first.outputs.first-publish == 'true' || steps.check-changes.outputs.should-publish == 'true'
@@ -155,6 +158,7 @@ jobs:
         if [ "${{ steps.check-first.outputs.first-publish }}" == "true" ] || [ "${{ steps.check-changes.outputs.should-publish }}" == "true" ]; then
           echo "✅ Successfully published @scoreboardmax/api-types to NPM with dual builds"
           echo "📦 Package now supports both CommonJS and ES6 modules"
+          echo "📋 Published with provenance for enhanced security"
           echo "Install with: npm install @scoreboardmax/api-types"
         else
           echo "ℹ️ No changes detected, skipping publish"
