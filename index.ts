@@ -1126,6 +1126,7 @@ export interface UserCredentialsRequest {
     name?: string;
     email: string;
     password?: string;
+    emailConsent: boolean;
 }
 
 export interface UserCredentialsResponse {
@@ -1142,6 +1143,7 @@ export interface UserCredentialsResponse {
     dateModified: string;
     dateLastSignIn: string;
     dateNow: string;
+    emailConsent: boolean;
 }
 
 export interface UserListResponse {
