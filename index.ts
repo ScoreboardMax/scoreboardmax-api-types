@@ -562,6 +562,7 @@ export interface Event {
   resource: string;
   resourceUri: string;
   subscriptionResourceUri: string;
+  action: EventAction;
   data: object | null;
 }
 
@@ -573,6 +574,7 @@ export interface EventResponse {
   resource: string;
   resourceUri: string;
   subscriptionResourceUri: string;
+  action: EventAction;
   data: object | null;
 }
 
