@@ -159,6 +159,13 @@ export enum ErrorCode {
   UnspecifiedError = "UnspecifiedError",
 }
 
+export enum EventAction {
+  Created = "created",
+  Updated = "updated",
+  Deleted = "deleted",
+  Read = "read"
+}
+
 export enum ExtraTimeLabel {
     ExtraTime = "ET",
     Overtime = "OT",
