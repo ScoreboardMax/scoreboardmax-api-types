@@ -570,7 +570,7 @@ export interface Event {
   resourceUri: string;
   subscriptionResourceUri: string;
   action: EventAction;
-  data: object | null;
+  data: object;
 }
 
 export interface EventResponse {
@@ -582,7 +582,7 @@ export interface EventResponse {
   resourceUri: string;
   subscriptionResourceUri: string;
   action: EventAction;
-  data: object | null;
+  data: object;
 }
 
 export interface FileListResponse {
