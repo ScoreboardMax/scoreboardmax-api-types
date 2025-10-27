@@ -1264,7 +1264,7 @@ export interface WebsocketMessage {
 
 export interface WebsocketSubscriptionRequest {
     connectionId: string;
-    triggerEvent?: boolean
+    sendInitialData?: boolean
 }
 
 export interface WebsocketSubscriptionResponse {
