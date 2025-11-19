@@ -1380,7 +1380,7 @@ export interface WebsocketScoreboardSubscriptionRequest {
     action: "sendmessage";
     operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
     scoreboardId: string;
-    sendInitialData?: boolean;
+    sendInitialData: boolean;
     token: string;
 }
 
