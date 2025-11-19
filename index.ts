@@ -1380,6 +1380,7 @@ export interface WebsocketScoreboardSubscriptionRequest {
     action: "sendmessage";
     operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
     scoreboardId: string;
+    appId?: string;
     sendInitialData?: boolean;
     token: string;
 }
@@ -1387,11 +1388,13 @@ export interface WebsocketScoreboardSubscriptionRequest {
 export interface WebsocketScoreboardSubscriptionResponse {
     operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
     scoreboardId: string;
+    appId?: string;
     error?: ErrorResponse;
 }
 
 export interface WebsocketSubscriptionRequest {
     connectionId: string;
+    appId?: string;
     sendInitialData?: boolean;
 }
 
@@ -1400,6 +1403,7 @@ export interface WebsocketSubscriptionResponse {
     subscriptionResource: string;
     subscriptionResourceUri: string;
     accountId: string;
+    appId?: string;
 }
 
 export interface WrestlingDataRequest {
