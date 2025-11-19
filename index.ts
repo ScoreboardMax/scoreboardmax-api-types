@@ -42,6 +42,8 @@ export enum ApiResource {
     All = "*",
     Account = "account",
     AccountList = "accountList",
+    App = "app",
+    AppList = "appList",
     File = "file",
     FileList = "fileList",
     Auth = "auth",
@@ -68,6 +70,10 @@ export enum ApiResource {
     OverlayList = "overlayList",
     Preset = "preset",
     PresetList = "presetList",
+}
+
+export enum AppType {
+    Template = "template",
 }
 
 export enum AuthType {
@@ -120,6 +126,7 @@ export enum ContentType {
     Avif = "image/avif",
     Csv = "text/csv",
     Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    Zip = "application/zip",
 }
 
 export enum DownAndDistanceDisplay {
@@ -147,6 +154,7 @@ export enum ErrorCode {
   AccountStorageExceeded = "AccountStorageExceeded",
   ActiveScoreboardsExceeded = "ActiveScoreboardsExceeded",
   AccountFeatureNotEnabled = "AccountFeatureNotEnabled",
+  AppNotEnabled = "AppNotEnabled",
   ImageProcessingError = "ImageProcessingError",
   RemoteServerError = "RemoteServerError",
   RemoteServerTimeout = "RemoteServerTimeout",
@@ -251,10 +259,17 @@ export enum SoccerPeriod {
     Shootout = "shootout",
 }
 
+export enum TemplateUseCase {
+    Embed = "embed",
+    Display = "display",
+    Direct = "direct",
+}
+
 export enum WebsocketMessageType {
     Event = "event",
     Heartbeat = "heartbeat",
     ConnectionConfirmation = "connectionConfirmation",
+    SubscriptionConfirmation = "subscriptionConfirmation",
     Info = "info",
     Meta = "meta",
 }
@@ -262,6 +277,8 @@ export enum WebsocketMessageType {
 export enum WebsocketOperation {
     SendHeartbeat = "sendHeartbeat",
     GetConnectionId = "getConnectionId",
+    SubscribeScoreboard = "subscribeScoreboard",
+    UnsubscribeScoreboard = "unsubscribeScoreboard",
 }
 
 export enum WrestlingMeetType {
@@ -308,6 +325,40 @@ export interface AccountResponse {
   dateModified: string;
   subscriptionId: string | null;
   token?: string;
+}
+
+export interface AppListResponse {
+    url: string;
+    uri: string;
+    pageNext: string | null;
+    data: AppResponse[];
+}
+
+export interface AppManifest {
+    type: AppType.Template;
+    manifestVersion: number;
+    name: string;
+    description: string;
+    version: string;
+    templates: TemplateDefinition[];
+}
+
+export interface AppRequest {
+    uploadId: string;
+}
+
+export interface AppResponse {
+    object: string;
+    url: string;
+    uri: string;
+    appId: string;
+    version: string;
+    name: string;
+    description: string;
+    type: AppType;
+    manifest: AppManifest;
+    accountId: string;
+    dateCreated: string;
 }
 
 export interface Auth {
@@ -440,6 +491,13 @@ export interface BaseballSettingsRequest extends BaseballSettings {
 export interface BaseballSettingsResponse extends BaseballSettings {
 }
 
+export interface BaseInput {
+    type: string;
+    label: string;
+    description?: string;
+    default: any;
+}
+
 export interface BasketballDataRequest {
     period: BasketballPeriod;
     team1: BasketballScoreboardTeamRequest;
@@ -500,6 +558,11 @@ export interface BasketballSettingsRequest extends BasketballSettings {
 export interface BasketballSettingsResponse extends BasketballSettings {
 }
 
+export interface BooleanInput extends BaseInput {
+    type: "boolean";
+    default: boolean;
+}
+
 export interface CheckoutSessionRequest {
     priceId: string;
     currency: string;
@@ -540,6 +603,11 @@ export interface ClockResponse extends Clock {
     uri: string;
     display: string | null; 
     nowTimestamp: number;
+}
+
+export interface ColorInput extends BaseInput {
+    type: "color";
+    default: string;
 }
 
 export interface DataExtractRequest {
@@ -594,6 +662,7 @@ export interface FileListResponse {
 
 export interface FileRequest {
     uploadId: string;
+    type: FileType;
 }
 
 export interface FileResponse {
@@ -697,6 +766,14 @@ export interface NewAccountRequest {
   email: string;
   password: string;
   name?: string;
+}
+
+export interface NumberInput extends BaseInput {
+    type: "number";
+    default: number;
+    min?: number;
+    max?: number;
+    step?: number;
 }
 
 export interface OAuthBindingRequest {
@@ -837,6 +914,14 @@ export interface PresetResponse {
     dateModified: string;
 }
 
+export interface RangeInput extends BaseInput {
+    type: "range";
+    default: number;
+    min: number;
+    max: number;
+    step?: number;
+}
+
 export interface RosterListResponse {
   url: string;
   uri: string;
@@ -900,6 +985,7 @@ export interface ScoreboardRequest {
   type: ScoreboardType;
   version: number;
   data: BasketballDataRequest | FootballDataRequest | VolleyballDataRequest | SoccerDataRequest | BaseballDataRequest | WrestlingDataRequest;
+  templates?: TemplateSelection[];
 }
 
 export interface ScoreboardResponse {
@@ -922,6 +1008,7 @@ export interface ScoreboardResponse {
   clocks: ClockListResponse | string;
   overlay: OverlayResponse | string;
   version: number;
+  templates: TemplateSelection[];
 }
 
 export interface ScoreboardSettingsBase {
@@ -955,6 +1042,12 @@ export interface ScoreboardTeamBaseResponse {
     rosterId: string | null;
     roster: string | RosterResponse | null;
     reference: string;
+}
+
+export interface SelectInput extends BaseInput {
+    type: "select";
+    default: string;
+    options: Array<{ value: string; label: string }>;
 }
 
 export interface ServerTime {
@@ -1114,16 +1207,37 @@ export interface TeamResponse {
   dateModified: string;
 }
 
+export interface TemplateDefinition {
+    path: string;
+    name: string;
+    sport: string;
+    useCases: TemplateUseCase[];
+    thumbnail?: string;
+    settings?: Record<string, InputDefinition>;
+}
+
+export interface TemplateSelection {
+    path: string;
+    appId: string;
+    useCase: TemplateUseCase;
+    version?: string; 
+    settings?: Record<string, InputSelection>;
+}
+
+export interface TextInput extends BaseInput {
+    type: "text";
+    default: string;
+    maxLength?: number;
+}
+
 export interface UploadSessionRequest {
     filename: string;
-    type: FileType;
     reference?: string;
 }
 
 export interface UploadSessionResponse {
     object: string;
     uploadId: string;
-    type: FileType;
     filename: string;
     reference?: string;
     contentType: ContentType;
@@ -1262,9 +1376,23 @@ export interface WebsocketMessage {
     data: Event | MetaMessage | WebsocketConnectionIdResponse | null;
 }
 
+export interface WebsocketScoreboardSubscriptionRequest {
+    action: "sendmessage";
+    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
+    scoreboardId: string;
+    sendInitialData?: boolean;
+    token: string;
+}
+
+export interface WebsocketScoreboardSubscriptionResponse {
+    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
+    scoreboardId: string;
+    error?: ErrorResponse;
+}
+
 export interface WebsocketSubscriptionRequest {
     connectionId: string;
-    sendInitialData?: boolean
+    sendInitialData?: boolean;
 }
 
 export interface WebsocketSubscriptionResponse {
@@ -1339,17 +1467,21 @@ export interface WrestlingSettingsRequest extends WrestlingSettings {
 export interface WrestlingSettingsResponse extends WrestlingSettings {
 }
 
+export type InputDefinition = SelectInput | BooleanInput | ColorInput | TextInput | NumberInput | RangeInput;
+
+export type InputSelection = Record<string, string | number | boolean>;
+
 export type PermissionItem = {
     [uri: string]: ApiAction[];
-}
+};
 
 export type Permissions = {
     allow: ResourcePermissions;
     deny: ResourcePermissions;
-}
+};
 
 export type ResourcePermissions = {
     [key in ApiResource]?: PermissionItem[];
-}
+};
 
 export {};
