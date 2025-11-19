@@ -1,14 +1,14 @@
-name: Publish to NPM (latest)
+name: Publish to NPM
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, next ]
     paths: [ 'index.ts' ]
   workflow_dispatch:   
 
 permissions:
-  id-token: write      # Required for OIDC
-  contents: write      # Keep this for git operations
+  id-token: write      # Required for OIDC/provenance
+  contents: write      # For git operations
 
 jobs:
   publish:
@@ -54,45 +54,28 @@ jobs:
           echo "should-publish=true" >> $GITHUB_OUTPUT
         fi
 
-    - name: Determine version bump type
-      id: version-bump
-      if: steps.check-changes.outputs.should-publish == 'true'
-      run: |
-        # For now, default to patch 
-        echo "bump=patch" >> $GITHUB_OUTPUT
-        echo "Using patch version bump"
-
     - name: Build dual packages
       if: steps.check-changes.outputs.should-publish == 'true'
       run: |
-        echo "Building CommonJS and ES6 modules..."
-        
-        # Create dist directory
+        echo "Building CommonJS and ES modules..."
         mkdir -p dist
         
-        # Build CommonJS version
-        echo "Building CommonJS..."
+        # CommonJS build
         tsc --module commonjs --target es2020 --outDir dist/cjs --declaration true index.ts
         mv dist/cjs/index.js dist/index.cjs
         
-        # Build ES6 version
-        echo "Building ES6..."
+        # ES module build
         tsc --module es2020 --target es2020 --outDir dist/esm --declaration true index.ts
         mv dist/esm/index.js dist/index.mjs
         
-        # Copy types from either build (they're the same)
+        # Types (same for both)
         cp dist/cjs/index.d.ts dist/index.d.ts
         
-        # Clean up temp directories
+        # Clean up temp dirs
         rm -rf dist/cjs dist/esm
         
-        # Verify builds
         echo "Build verification:"
         ls -la dist/
-        echo "CommonJS sample:"
-        head -5 dist/index.cjs
-        echo "ES6 sample:"
-        head -5 dist/index.mjs
 
     - name: Bump version and publish
       if: steps.check-changes.outputs.should-publish == 'true'
@@ -103,28 +86,40 @@ jobs:
           exit 1
         fi
 
-        # Bump stable version (patch/minor/major – currently patch)
-        npm version ${{ steps.version-bump.outputs.bump }} --no-git-tag-version
-        NEW_VERSION=$(node -p "require('./package.json').version")
-        echo "Bumped to version $NEW_VERSION"
-        
-        # Commit the version change and create a tag
-        git add package.json
-        git commit -m "Bump version to $NEW_VERSION" || echo "No changes to commit"
-        git tag "v$NEW_VERSION" || echo "Tag already exists?"
-        
-        # Output the new version for later steps
-        echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "New version: $NEW_VERSION"
-        
-        # Publish to NPM using OIDC (defaults to dist-tag "latest")
-        npm publish --provenance --access public
-        
-        # Push the commit and tag
-        git push origin main --tags || echo "Nothing to push"
+        # Decide behavior based on branch
+        if [ "$GITHUB_REF_NAME" = "main" ]; then
+          echo "Publishing stable release from main (latest)..."
+          # Stable bump (patch for now)
+          npm version patch --no-git-tag-version
+          TAG="latest"
+        else
+          echo "Publishing prerelease from next (dist-tag: next)..."
+          # Prerelease bump for staging
+          npm version prerelease --preid next --no-git-tag-version
+          TAG="next"
+        fi
 
-    - name: Create GitHub release
-      if: steps.check-changes.outputs.should-publish == 'true'
+        NEW_VERSION=$(node -p "require('./package.json').version")
+        echo "New version: $NEW_VERSION (tag: $TAG)"
+        echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+        # Publish using OIDC + provenance
+        npm publish --provenance --access public --tag "$TAG"
+
+        # Commit version bump & push
+        git add package.json
+
+        if [ "$GITHUB_REF_NAME" = "main" ]; then
+          git commit -m "Bump version to $NEW_VERSION" || echo "No changes to commit"
+          git tag "v$NEW_VERSION" || echo "Tag may already exist"
+          git push origin main --tags || echo "Nothing to push"
+        else
+          git commit -m "chore: bump next version to $NEW_VERSION" || echo "No changes to commit"
+          git push origin next || echo "Nothing to push"
+        fi
+
+    - name: Create GitHub release (stable only)
+      if: steps.check-changes.outputs.should-publish == 'true' && github.ref_name == 'main'
       run: |
         gh release create "v${{ steps.bump-version.outputs.new-version }}" \
           --title "v${{ steps.bump-version.outputs.new-version }}" \
@@ -140,11 +135,12 @@ jobs:
 
     - name: Summary
       run: |
-        if [ "${{ steps.check-changes.outputs.should-publish }}" == "true" ]; then
-          echo "✅ Successfully published @scoreboardmax/api-types@${{ steps.bump-version.outputs.new-version }} to NPM (latest)"
-          echo "📦 Package supports both CommonJS and ES6 modules"
-          echo "📋 Published with provenance for enhanced security"
-          echo "Install with: npm install @scoreboardmax/api-types"
+        if [ "${{ steps.check-changes.outputs.should-publish }}" != "true" ]; then
+          echo "ℹ️ No changes detected in index.ts, skipping publish"
         else
-          echo "ℹ️ No changes detected, skipping publish"
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            echo "✅ Published @scoreboardmax/api-types@${{ steps.bump-version.outputs.new-version }} to NPM (latest)"
+          else
+            echo "✅ Published @scoreboardmax/api-types@${{ steps.bump-version.outputs.new-version }} to NPM with dist-tag \"next\""
+          fi
         fi
