@@ -41,19 +41,9 @@ jobs:
     - name: Check for actual type changes
       id: check-changes
       run: |
-        # Compare current index.ts with previous commit
-        if git show HEAD~1:index.ts > previous.ts 2>/dev/null; then
-          if diff -q index.ts previous.ts > /dev/null; then
-            echo "No actual changes to types content"
-            echo "should-publish=false" >> $GITHUB_OUTPUT
-          else
-            echo "Types content has changed"
-            echo "should-publish=true" >> $GITHUB_OUTPUT
-          fi
-        else
-          echo "Previous version not found, treating as new"
-          echo "should-publish=true" >> $GITHUB_OUTPUT
-        fi
+        # TEMPORARY: Force publish for one-time GitHub Packages sync
+        echo "Forcing publish for GitHub Packages mirror sync"
+        echo "should-publish=true" >> $GITHUB_OUTPUT
 
     - name: Build dual packages
       if: steps.check-changes.outputs.should-publish == 'true'
