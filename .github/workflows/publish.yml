@@ -119,9 +119,10 @@ jobs:
       run: |
         echo "📦 Publishing mirror to GitHub Packages..."
 
-        # Configure temp .npmrc for GitHub Packages
-        echo "@scoreboardmax:registry=https://npm.pkg.github.com" >> ~/.npmrc
-        echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+        # Reconfigure npm for GitHub Packages
+        npm config set registry https://npm.pkg.github.com
+        npm config set //npm.pkg.github.com/:_authToken ${NODE_AUTH_TOKEN}
+        npm config set @scoreboardmax:registry https://npm.pkg.github.com
 
         # Determine which tag to use based on branch
         if [ "$GITHUB_REF_NAME" = "main" ]; then
