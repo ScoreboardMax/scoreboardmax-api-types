@@ -21,7 +21,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup Node.js (npmjs registry)
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
@@ -78,7 +78,7 @@ jobs:
         echo "Build verification:"
         ls -la dist/
 
-    - name: Bump version and publish to npmjs
+    - name: Bump version and publish
       if: steps.check-changes.outputs.should-publish == 'true'
       id: bump-version
       run: |
@@ -90,10 +90,12 @@ jobs:
         # Decide behavior based on branch
         if [ "$GITHUB_REF_NAME" = "main" ]; then
           echo "Publishing stable release from main (latest)..."
+          # Stable bump (patch for now)
           npm version patch --no-git-tag-version
           TAG="latest"
         else
           echo "Publishing prerelease from next (dist-tag: next)..."
+          # Prerelease bump for staging
           npm version prerelease --preid next --no-git-tag-version
           TAG="next"
         fi
@@ -102,7 +104,7 @@ jobs:
         echo "New version: $NEW_VERSION (tag: $TAG)"
         echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-        # Publish to npmjs
+        # Publish using OIDC + provenance
         npm publish --provenance --access public --tag "$TAG"
 
         # Commit version bump & push
@@ -118,7 +120,7 @@ jobs:
         fi
 
     # =============================
-    #   NEW STEP: GitHub Packages
+    #   GitHub Packages Mirror
     # =============================
     - name: Mirror publish to GitHub Packages
       if: steps.check-changes.outputs.should-publish == 'true'
@@ -131,11 +133,17 @@ jobs:
         echo "@scoreboardmax:registry=https://npm.pkg.github.com" >> ~/.npmrc
         echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
 
-        # Publish the same version & same tag
-        npm publish --tag "${{ steps.bump-version.outputs.new-version && (github.ref_name == 'main' && 'latest' || 'next') || '' }}" || \
-        npm publish --tag "$TAG"
+        # Determine which tag to use based on branch
+        if [ "$GITHUB_REF_NAME" = "main" ]; then
+          PUBLISH_TAG="latest"
+        else
+          PUBLISH_TAG="next"
+        fi
 
-        echo "✅ Successfully published to GitHub Packages"
+        # Publish with the appropriate tag
+        npm publish --tag "$PUBLISH_TAG"
+
+        echo "✅ Successfully published to GitHub Packages with tag: $PUBLISH_TAG"
 
     - name: Create GitHub release (stable only)
       if: steps.check-changes.outputs.should-publish == 'true' && github.ref_name == 'main'
