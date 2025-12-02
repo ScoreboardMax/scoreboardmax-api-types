@@ -9,6 +9,7 @@ on:
 permissions:
   id-token: write      # Required for OIDC/provenance
   contents: write      # For git operations
+  packages: write      # Required for GitHub Packages publish
 
 jobs:
   publish:
@@ -40,9 +41,19 @@ jobs:
     - name: Check for actual type changes
       id: check-changes
       run: |
-        # TEMPORARY: Force publish for one-time GitHub Packages sync
-        echo "Forcing publish for GitHub Packages mirror sync"
-        echo "should-publish=true" >> $GITHUB_OUTPUT
+        # Compare current index.ts with previous commit
+        if git show HEAD~1:index.ts > previous.ts 2>/dev/null; then
+          if diff -q index.ts previous.ts > /dev/null; then
+            echo "No actual changes to types content"
+            echo "should-publish=false" >> $GITHUB_OUTPUT
+          else
+            echo "Types content has changed"
+            echo "should-publish=true" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "Previous version not found, treating as new"
+          echo "should-publish=true" >> $GITHUB_OUTPUT
+        fi
 
     - name: Build dual packages
       if: steps.check-changes.outputs.should-publish == 'true'
@@ -108,6 +119,32 @@ jobs:
           git push origin next || echo "Nothing to push"
         fi
 
+    # =============================
+    #   GitHub Packages Mirror
+    # =============================
+    - name: Mirror publish to GitHub Packages
+      if: steps.check-changes.outputs.should-publish == 'true'
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "📦 Publishing mirror to GitHub Packages..."
+
+        # Configure temp .npmrc for GitHub Packages
+        echo "@scoreboardmax:registry=https://npm.pkg.github.com" >> ~/.npmrc
+        echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+
+        # Determine which tag to use based on branch
+        if [ "$GITHUB_REF_NAME" = "main" ]; then
+          PUBLISH_TAG="latest"
+        else
+          PUBLISH_TAG="next"
+        fi
+
+        # Publish with the appropriate tag
+        npm publish --tag "$PUBLISH_TAG"
+
+        echo "✅ Successfully published to GitHub Packages with tag: $PUBLISH_TAG"
+
     - name: Create GitHub release (stable only)
       if: steps.check-changes.outputs.should-publish == 'true' && github.ref_name == 'main'
       run: |
@@ -130,7 +167,9 @@ jobs:
         else
           if [ "$GITHUB_REF_NAME" = "main" ]; then
             echo "✅ Published @scoreboardmax/api-types@${{ steps.bump-version.outputs.new-version }} to NPM (latest)"
+            echo "📦 Mirrored to GitHub Packages as well"
           else
             echo "✅ Published @scoreboardmax/api-types@${{ steps.bump-version.outputs.new-version }} to NPM with dist-tag \"next\""
+            echo "📦 Mirrored to GitHub Packages with dist-tag \"next\""
           fi
         fi
