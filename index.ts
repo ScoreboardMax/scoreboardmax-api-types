@@ -30,38 +30,6 @@ export const isWrestlingData = (data: any): data is WrestlingDataResponse => {
   return data.type === ScoreboardType.Wrestling;
 }
 
-export declare enum ErrorCode {
-    ForbiddenSelfPermissionsChange = "ForbiddenSelfPermissionsChange",
-    InsufficientAdminPermissions = "InsufficientAdminPermissions",
-    InsufficientItemPermissions = "InsufficientItemPermissions",
-    InsufficientResourcePermissions = "InsufficientResourcePermissions",
-    InsufficientResourceItemPermissions = "InsufficientResourceItemPermissions",
-    InvalidAuthType = "InvalidAuthType",
-    InvalidColorFormat = "InvalidColorFormat",
-    InvalidDate = "InvalidDate",
-    InvalidInput = "InvalidInput",
-    InvalidRequest = "InvalidRequest",
-    InvalidPermissionGrant = "InvalidPermissionGrant",
-    InvalidSignIn = "InvalidSignIn",
-    InvalidAccountSignIn = "InvalidAccountSignIn",
-    InvalidToken = "InvalidToken",
-    AccountLimitExceeded = "AccountLimitExceeded",
-    AccountStorageExceeded = "AccountStorageExceeded",
-    ActiveScoreboardsExceeded = "ActiveScoreboardsExceeded",
-    AccountFeatureNotEnabled = "AccountFeatureNotEnabled",
-    AppNotEnabled = "AppNotEnabled",
-    ImageProcessingError = "ImageProcessingError",
-    RemoteServerError = "RemoteServerError",
-    RemoteServerTimeout = "RemoteServerTimeout",
-    RequestLimitExceeded = "RequestLimitExceeded",
-    ResourceNotFound = "ResourceNotFound",
-    UserCredentialsInUse = "UserCredentialsInUse",
-    AccountEmailInUse = "AccountEmailInUse",
-    IncompatibleState = "IncompatibleState",
-    VersionConflict = "VersionConflict",
-    UnspecifiedError = "UnspecifiedError"
-}
-
 export enum ApiAction {
     Create = "create",
     Read = "read",
@@ -165,6 +133,38 @@ export enum DownAndDistanceDisplay {
     Both = "both",
     DownOnly = "downOnly",
     None = "none",
+}
+
+export enum ErrorCode {
+    ForbiddenSelfPermissionsChange = "ForbiddenSelfPermissionsChange",
+    InsufficientAdminPermissions = "InsufficientAdminPermissions",
+    InsufficientItemPermissions = "InsufficientItemPermissions",
+    InsufficientResourcePermissions = "InsufficientResourcePermissions",
+    InsufficientResourceItemPermissions = "InsufficientResourceItemPermissions",
+    InvalidAuthType = "InvalidAuthType",
+    InvalidColorFormat = "InvalidColorFormat",
+    InvalidDate = "InvalidDate",
+    InvalidInput = "InvalidInput",
+    InvalidRequest = "InvalidRequest",
+    InvalidPermissionGrant = "InvalidPermissionGrant",
+    InvalidSignIn = "InvalidSignIn",
+    InvalidAccountSignIn = "InvalidAccountSignIn",
+    InvalidToken = "InvalidToken",
+    AccountLimitExceeded = "AccountLimitExceeded",
+    AccountStorageExceeded = "AccountStorageExceeded",
+    ActiveScoreboardsExceeded = "ActiveScoreboardsExceeded",
+    AccountFeatureNotEnabled = "AccountFeatureNotEnabled",
+    AppNotEnabled = "AppNotEnabled",
+    ImageProcessingError = "ImageProcessingError",
+    RemoteServerError = "RemoteServerError",
+    RemoteServerTimeout = "RemoteServerTimeout",
+    RequestLimitExceeded = "RequestLimitExceeded",
+    ResourceNotFound = "ResourceNotFound",
+    UserCredentialsInUse = "UserCredentialsInUse",
+    AccountEmailInUse = "AccountEmailInUse",
+    IncompatibleState = "IncompatibleState",
+    VersionConflict = "VersionConflict",
+    UnspecifiedError = "UnspecifiedError"
 }
 
 export enum EventAction {
