@@ -541,6 +541,10 @@ export interface CheckoutSessionResponse {
     redirectUrl: string;
 }
 
+export interface ClientConfigResponse {
+    websocketUrl: string;
+}
+
 export interface Clock {
     clockId: string;
     scoreboardId: string;
