@@ -135,38 +135,6 @@ export enum DownAndDistanceDisplay {
     None = "none",
 }
 
-export enum ErrorCode {
-    ForbiddenSelfPermissionsChange = "ForbiddenSelfPermissionsChange",
-    InsufficientAdminPermissions = "InsufficientAdminPermissions",
-    InsufficientItemPermissions = "InsufficientItemPermissions",
-    InsufficientResourcePermissions = "InsufficientResourcePermissions",
-    InsufficientResourceItemPermissions = "InsufficientResourceItemPermissions",
-    InvalidAuthType = "InvalidAuthType",
-    InvalidColorFormat = "InvalidColorFormat",
-    InvalidDate = "InvalidDate",
-    InvalidInput = "InvalidInput",
-    InvalidRequest = "InvalidRequest",
-    InvalidPermissionGrant = "InvalidPermissionGrant",
-    InvalidSignIn = "InvalidSignIn",
-    InvalidAccountSignIn = "InvalidAccountSignIn",
-    InvalidToken = "InvalidToken",
-    AccountLimitExceeded = "AccountLimitExceeded",
-    AccountStorageExceeded = "AccountStorageExceeded",
-    ActiveScoreboardsExceeded = "ActiveScoreboardsExceeded",
-    AccountFeatureNotEnabled = "AccountFeatureNotEnabled",
-    AppNotEnabled = "AppNotEnabled",
-    ImageProcessingError = "ImageProcessingError",
-    RemoteServerError = "RemoteServerError",
-    RemoteServerTimeout = "RemoteServerTimeout",
-    RequestLimitExceeded = "RequestLimitExceeded",
-    ResourceNotFound = "ResourceNotFound",
-    UserCredentialsInUse = "UserCredentialsInUse",
-    AccountEmailInUse = "AccountEmailInUse",
-    IncompatibleState = "IncompatibleState",
-    VersionConflict = "VersionConflict",
-    UnspecifiedError = "UnspecifiedError"
-}
-
 export enum EventAction {
   Created = "created",
   Updated = "updated",
@@ -573,6 +541,10 @@ export interface CheckoutSessionResponse {
     redirectUrl: string;
 }
 
+export interface ClientConfigResponse {
+    websocketUrl: string;
+}
+
 export interface Clock {
     clockId: string;
     scoreboardId: string;
@@ -621,14 +593,6 @@ export interface DataExtractResponse {
 }
 
 export interface DataRow extends Array<string> { }
-
-export interface ErrorResponse {
-    error: boolean;
-    code: ErrorCode;
-    statusCode: number;
-    reference: string;
-    message: string;
-}
 
 export interface Event {
   eventId: string;
@@ -1380,7 +1344,6 @@ export interface WebsocketScoreboardSubscriptionRequest {
     action: "sendmessage";
     operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
     scoreboardId: string;
-    appId?: string;
     sendInitialData?: boolean;
     token: string;
 }
@@ -1388,13 +1351,11 @@ export interface WebsocketScoreboardSubscriptionRequest {
 export interface WebsocketScoreboardSubscriptionResponse {
     operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
     scoreboardId: string;
-    appId?: string;
     error?: ErrorResponse;
 }
 
 export interface WebsocketSubscriptionRequest {
     connectionId: string;
-    appId?: string;
     sendInitialData?: boolean;
 }
 
@@ -1403,7 +1364,6 @@ export interface WebsocketSubscriptionResponse {
     subscriptionResource: string;
     subscriptionResourceUri: string;
     accountId: string;
-    appId?: string;
 }
 
 export interface WrestlingDataRequest {
