@@ -240,7 +240,6 @@ export enum VolleyballSet {
     Third = "3",
     Fourth = "4",
     Fifth = "5",
-    Final = "final"
 }
 
 export enum WebsocketMessageType {
