@@ -1349,20 +1349,6 @@ export interface WebsocketMessage {
     data: Event | MetaMessage | WebsocketConnectionIdResponse | null;
 }
 
-export interface WebsocketScoreboardSubscriptionRequest {
-    action: "sendmessage";
-    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
-    scoreboardId: string;
-    sendInitialData?: boolean;
-    token: string;
-}
-
-export interface WebsocketScoreboardSubscriptionResponse {
-    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
-    scoreboardId: string;
-    error?: ErrorResponse;
-}
-
 export interface WebsocketSubscriptionRequest {
     connectionId: string;
     sendInitialData?: boolean;
