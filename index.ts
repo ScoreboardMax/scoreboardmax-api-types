@@ -233,6 +233,15 @@ export enum TemplateUseCase {
     Direct = "direct",
 }
 
+export enum VolleyballSet {
+    Pre = "pregame",
+    First = "1",
+    Second = "2",
+    Third = "3",
+    Fourth = "4",
+    Fifth = "5",
+}
+
 export enum WebsocketMessageType {
     Event = "event",
     Heartbeat = "heartbeat",
@@ -1273,7 +1282,7 @@ export interface UserUpdateRequest {
 }
 
 export interface VolleyballDataRequest {
-    set: number | null;
+    set: VolleyballSet;
     team1: VolleyballScoreboardTeamRequest;
     team2: VolleyballScoreboardTeamRequest;
     settings?: VolleyballSettingsRequest;
@@ -1281,7 +1290,7 @@ export interface VolleyballDataRequest {
 
 export interface VolleyballDataResponse {
     type: ScoreboardType;
-    set: number | null;
+    set: VolleyballSet;
     team1: VolleyballScoreboardTeamResponse;
     team2: VolleyballScoreboardTeamResponse;
     settings: VolleyballSettingsResponse;
