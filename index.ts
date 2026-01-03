@@ -793,6 +793,11 @@ export interface OAuthBindingRequest {
     messageCipher: string;
 }
 
+export interface OAuthRequest {
+    code: string;
+    redirectUri: string;
+}
+
 export interface OAuthResponse {
     auth?: AuthResponse;
     userCredentials?: UserCredentialsResponse;
