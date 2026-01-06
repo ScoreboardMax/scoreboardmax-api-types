@@ -492,6 +492,7 @@ export interface BaseballSettings extends ScoreboardSettingsBase {
     showPitchClock: boolean;
     showPitchClockWhenLow: boolean;
     enableClockAutomations: boolean;
+    innings: number;
 }
 
 export interface BaseballSettingsRequest extends BaseballSettings {
