@@ -135,6 +135,38 @@ export enum DownAndDistanceDisplay {
     None = "none",
 }
 
+export enum ErrorCode {
+    ForbiddenSelfPermissionsChange = "ForbiddenSelfPermissionsChange",
+    InsufficientAdminPermissions = "InsufficientAdminPermissions",
+    InsufficientItemPermissions = "InsufficientItemPermissions",
+    InsufficientResourcePermissions = "InsufficientResourcePermissions",
+    InsufficientResourceItemPermissions = "InsufficientResourceItemPermissions",
+    InvalidAuthType = "InvalidAuthType",
+    InvalidColorFormat = "InvalidColorFormat",
+    InvalidDate = "InvalidDate",
+    InvalidInput = "InvalidInput",
+    InvalidRequest = "InvalidRequest",
+    InvalidPermissionGrant = "InvalidPermissionGrant",
+    InvalidSignIn = "InvalidSignIn",
+    InvalidAccountSignIn = "InvalidAccountSignIn",
+    InvalidToken = "InvalidToken",
+    AccountLimitExceeded = "AccountLimitExceeded",
+    AccountStorageExceeded = "AccountStorageExceeded",
+    ActiveScoreboardsExceeded = "ActiveScoreboardsExceeded",
+    AccountFeatureNotEnabled = "AccountFeatureNotEnabled",
+    AppNotEnabled = "AppNotEnabled",
+    ImageProcessingError = "ImageProcessingError",
+    RemoteServerError = "RemoteServerError",
+    RemoteServerTimeout = "RemoteServerTimeout",
+    RequestLimitExceeded = "RequestLimitExceeded",
+    ResourceNotFound = "ResourceNotFound",
+    UserCredentialsInUse = "UserCredentialsInUse",
+    AccountEmailInUse = "AccountEmailInUse",
+    IncompatibleState = "IncompatibleState",
+    VersionConflict = "VersionConflict",
+    UnspecifiedError = "UnspecifiedError"
+}
+
 export enum EventAction {
   Created = "created",
   Updated = "updated",
@@ -231,6 +263,15 @@ export enum TemplateUseCase {
     Embed = "embed",
     Display = "display",
     Direct = "direct",
+}
+
+export enum VolleyballSet {
+    Pre = "pregame",
+    First = "1",
+    Second = "2",
+    Third = "3",
+    Fourth = "4",
+    Fifth = "5",
 }
 
 export enum WebsocketMessageType {
@@ -451,6 +492,7 @@ export interface BaseballSettings extends ScoreboardSettingsBase {
     showPitchClock: boolean;
     showPitchClockWhenLow: boolean;
     enableClockAutomations: boolean;
+    innings: number;
 }
 
 export interface BaseballSettingsRequest extends BaseballSettings {
@@ -543,6 +585,8 @@ export interface CheckoutSessionResponse {
 
 export interface ClientConfigResponse {
     websocketUrl: string;
+    signInUrl: string;
+    dashboardUrl: string;
 }
 
 export interface Clock {
@@ -593,6 +637,14 @@ export interface DataExtractResponse {
 }
 
 export interface DataRow extends Array<string> { }
+
+export interface ErrorResponse {
+    error: boolean;
+    code: ErrorCode;
+    statusCode: number;
+    reference: string;
+    message: string;
+}
 
 export interface Event {
   eventId: string;
@@ -742,6 +794,11 @@ export interface NumberInput extends BaseInput {
 
 export interface OAuthBindingRequest {
     messageCipher: string;
+}
+
+export interface OAuthRequest {
+    code: string;
+    redirectUri: string;
 }
 
 export interface OAuthResponse {
@@ -961,6 +1018,8 @@ export interface ScoreboardResponse {
   description: string;
   controlUrl: string;
   embedUrl: string;
+  displayUrl: string;
+  directUrl: string;
   type: ScoreboardType;
   data: BasketballDataResponse | FootballDataResponse | VolleyballDataResponse | SoccerDataResponse | BaseballDataResponse | WrestlingDataResponse;
   accountId: string;
@@ -1273,7 +1332,7 @@ export interface UserUpdateRequest {
 }
 
 export interface VolleyballDataRequest {
-    set: number | null;
+    set: VolleyballSet;
     team1: VolleyballScoreboardTeamRequest;
     team2: VolleyballScoreboardTeamRequest;
     settings?: VolleyballSettingsRequest;
@@ -1281,7 +1340,7 @@ export interface VolleyballDataRequest {
 
 export interface VolleyballDataResponse {
     type: ScoreboardType;
-    set: number | null;
+    set: VolleyballSet;
     team1: VolleyballScoreboardTeamResponse;
     team2: VolleyballScoreboardTeamResponse;
     settings: VolleyballSettingsResponse;
@@ -1338,20 +1397,6 @@ export interface WebsocketMessage {
     error: boolean
     message: string;
     data: Event | MetaMessage | WebsocketConnectionIdResponse | null;
-}
-
-export interface WebsocketScoreboardSubscriptionRequest {
-    action: "sendmessage";
-    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
-    scoreboardId: string;
-    sendInitialData?: boolean;
-    token: string;
-}
-
-export interface WebsocketScoreboardSubscriptionResponse {
-    operation: WebsocketOperation.SubscribeScoreboard | WebsocketOperation.UnsubscribeScoreboard;
-    scoreboardId: string;
-    error?: ErrorResponse;
 }
 
 export interface WebsocketSubscriptionRequest {
