@@ -585,6 +585,8 @@ export interface CheckoutSessionResponse {
 
 export interface ClientConfigResponse {
     websocketUrl: string;
+    signInUrl: string;
+    dashboardUrl: string;
 }
 
 export interface Clock {
@@ -1016,6 +1018,8 @@ export interface ScoreboardResponse {
   description: string;
   controlUrl: string;
   embedUrl: string;
+  displayUrl: string;
+  directUrl: string;
   type: ScoreboardType;
   data: BasketballDataResponse | FootballDataResponse | VolleyballDataResponse | SoccerDataResponse | BaseballDataResponse | WrestlingDataResponse;
   accountId: string;
