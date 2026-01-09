@@ -129,6 +129,12 @@ export enum ContentType {
     Zip = "application/zip",
 }
 
+export enum DisplayConnectionStatus {
+    New = "new",
+    Connected = "connected",
+    Completed = "completed",
+}
+
 export enum DownAndDistanceDisplay {
     Both = "both",
     DownOnly = "downOnly",
@@ -634,6 +640,20 @@ export interface DataExtractResponse {
 }
 
 export interface DataRow extends Array<string> { }
+
+export interface DisplayConnectionCodeRequest {
+    code: string;
+}
+
+export interface DisplayConnectionResponse {
+    displayConnectionId: string;
+    code: string;
+    status: DisplayConnectionStatus;
+    dateCreated: string;
+    dateModified: string;
+    dateExpires: string;
+    scoreboardUrl?: string;
+}
 
 export interface ErrorResponse {
     error: boolean;
