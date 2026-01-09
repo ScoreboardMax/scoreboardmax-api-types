@@ -278,7 +278,6 @@ export enum WebsocketMessageType {
     Event = "event",
     Heartbeat = "heartbeat",
     ConnectionConfirmation = "connectionConfirmation",
-    SubscriptionConfirmation = "subscriptionConfirmation",
     Info = "info",
     Meta = "meta",
 }
@@ -286,8 +285,6 @@ export enum WebsocketMessageType {
 export enum WebsocketOperation {
     SendHeartbeat = "sendHeartbeat",
     GetConnectionId = "getConnectionId",
-    SubscribeScoreboard = "subscribeScoreboard",
-    UnsubscribeScoreboard = "unsubscribeScoreboard",
 }
 
 export enum WrestlingMeetType {
