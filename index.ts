@@ -132,6 +132,7 @@ export enum ContentType {
 export enum DisplayConnectionStatus {
     New = "new",
     Connected = "connected",
+    Sent = "sent",
     Completed = "completed",
 }
 
