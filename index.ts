@@ -129,6 +129,13 @@ export enum ContentType {
     Zip = "application/zip",
 }
 
+export enum DisplayConnectionStatus {
+    New = "new",
+    Connected = "connected",
+    Sent = "sent",
+    Completed = "completed",
+}
+
 export enum DownAndDistanceDisplay {
     Both = "both",
     DownOnly = "downOnly",
@@ -278,7 +285,6 @@ export enum WebsocketMessageType {
     Event = "event",
     Heartbeat = "heartbeat",
     ConnectionConfirmation = "connectionConfirmation",
-    SubscriptionConfirmation = "subscriptionConfirmation",
     Info = "info",
     Meta = "meta",
 }
@@ -286,8 +292,6 @@ export enum WebsocketMessageType {
 export enum WebsocketOperation {
     SendHeartbeat = "sendHeartbeat",
     GetConnectionId = "getConnectionId",
-    SubscribeScoreboard = "subscribeScoreboard",
-    UnsubscribeScoreboard = "unsubscribeScoreboard",
 }
 
 export enum WrestlingMeetType {
@@ -637,6 +641,20 @@ export interface DataExtractResponse {
 }
 
 export interface DataRow extends Array<string> { }
+
+export interface DisplayConnectionCodeRequest {
+    code: string;
+}
+
+export interface DisplayConnectionResponse {
+    displayConnectionId: string;
+    code: string;
+    status: DisplayConnectionStatus;
+    dateCreated: string;
+    dateModified: string;
+    dateExpires: string;
+    scoreboardUrl?: string;
+}
 
 export interface ErrorResponse {
     error: boolean;
