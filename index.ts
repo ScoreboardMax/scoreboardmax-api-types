@@ -1019,6 +1019,16 @@ export interface ScoreboardListResponse {
   data: ScoreboardResponse[];
 }
 
+export interface ScoreboardQrPdfRequest {
+  target: string;
+  use: "control" | "embed" | "display" | "direct";
+  datePrinted: string;
+}
+
+export interface ScoreboardQrPdfResponse {
+  url: string;
+}
+
 export interface ScoreboardRequest {
   name: string | null;
   type: ScoreboardType;
