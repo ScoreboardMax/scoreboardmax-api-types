@@ -908,6 +908,7 @@ export interface PlayerSummaryRequest {
     number: string | null;
     position: string | null;
     imageFilename: string | null;
+    reference?: string;
 }
 
 export interface PlayerSummaryResponse {
@@ -920,6 +921,7 @@ export interface PlayerSummaryResponse {
     imageUrl: string | null;
     imagePreviewUrl: string | null;
     imageMediumUrl: string | null;
+    reference: string;
 }
 
 export interface PortalSessionResponse {
