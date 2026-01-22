@@ -216,6 +216,14 @@ export enum MetaMessageType {
     ScoreboardRefresh = "scoreboardRefresh",
 }
 
+export enum OAuthAction {
+    NewUserCreated = "new_user_created",
+    ExistingUserSignedIn = "existing_user_signed_in",
+    ProviderLinkedAndSignedIn = "provider_linked_and_signed_in",
+    RequiresUserDecision = "requires_user_decision",
+    NewAccountForExistingUser = "new_account_for_existing_user"
+}
+
 export enum OAuthProvider {
     Google = "google",
 }
@@ -828,6 +836,7 @@ export interface OAuthResponse {
     oAuthProviderName: string;
     messageCipher?: string;
     dateNow: string;
+    action: OAuthAction;
 }
 
 export interface OverlayRequest {
@@ -908,6 +917,7 @@ export interface PlayerSummaryRequest {
     number: string | null;
     position: string | null;
     imageFilename: string | null;
+    reference?: string;
 }
 
 export interface PlayerSummaryResponse {
@@ -920,6 +930,7 @@ export interface PlayerSummaryResponse {
     imageUrl: string | null;
     imagePreviewUrl: string | null;
     imageMediumUrl: string | null;
+    reference: string;
 }
 
 export interface PortalSessionResponse {
