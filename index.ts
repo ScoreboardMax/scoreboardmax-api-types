@@ -857,7 +857,7 @@ export interface Plan {
     planId: PlanId;
     resetScoreboards: boolean;
     apiAccess: boolean;
-    customizationAccess?: boolean;
+    customizationAccess: boolean;
     maxScoreboards: number;
     maxActiveScoreboards: number;
     maxConcurrentDevices: number;
