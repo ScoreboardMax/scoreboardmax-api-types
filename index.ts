@@ -391,6 +391,7 @@ export interface Auth {
   userId?: string;
   type: AuthType;
   isAdmin: boolean;
+  isAssumed?: boolean;
   description?: string | null;
   permissions: Permissions;
   dateCreated: string;
