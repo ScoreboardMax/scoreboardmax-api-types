@@ -44,6 +44,8 @@ export enum ApiResource {
     AccountList = "accountList",
     App = "app",
     AppList = "appList",
+    Archive = "archive",
+    ArchiveList = "archiveList",
     File = "file",
     FileList = "fileList",
     Auth = "auth",
