@@ -1,6 +1,6 @@
 {
   "name": "@scoreboardmax/api-types",
-  "version": "1.0.22-next.23",
+  "version": "1.0.22-next.24",
   "description": "TypeScript definitions for ScoreboardMax API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
