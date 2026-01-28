@@ -44,6 +44,8 @@ export enum ApiResource {
     AccountList = "accountList",
     App = "app",
     AppList = "appList",
+    Archive = "archive",
+    ArchiveList = "archiveList",
     File = "file",
     FileList = "fileList",
     Auth = "auth",
@@ -389,6 +391,7 @@ export interface Auth {
   userId?: string;
   type: AuthType;
   isAdmin: boolean;
+  isAssumed?: boolean;
   description?: string | null;
   permissions: Permissions;
   dateCreated: string;
