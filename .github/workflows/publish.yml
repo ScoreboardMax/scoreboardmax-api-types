@@ -41,36 +41,62 @@ jobs:
     - name: Check for actual type changes
       id: check-changes
       run: |
-        # Compare current index.ts with previous commit
-        if git show HEAD~1:index.ts > previous.ts 2>/dev/null; then
-          if diff -q index.ts previous.ts > /dev/null; then
-            echo "No actual changes to types content"
-            echo "should-publish=false" >> $GITHUB_OUTPUT
-          else
-            echo "Types content has changed"
-            echo "should-publish=true" >> $GITHUB_OUTPUT
+        PUBLIC_CHANGED=false
+        INTERNAL_CHANGED=false
+        
+        # Check public types
+        if git show HEAD~1:index.ts > previous-public.ts 2>/dev/null; then
+          if ! diff -q index.ts previous-public.ts > /dev/null; then
+            PUBLIC_CHANGED=true
           fi
         else
-          echo "Previous version not found, treating as new"
-          echo "should-publish=true" >> $GITHUB_OUTPUT
+          PUBLIC_CHANGED=true
         fi
-
+        
+        # Check internal types
+        if git show HEAD~1:internal.ts > previous-internal.ts 2>/dev/null; then
+          if ! diff -q internal.ts previous-internal.ts > /dev/null; then
+            INTERNAL_CHANGED=true
+          fi
+        else
+          INTERNAL_CHANGED=true
+        fi
+        
+        if [ "$PUBLIC_CHANGED" = true ] || [ "$INTERNAL_CHANGED" = true ]; then
+          echo "Types content has changed"
+          echo "should-publish=true" >> $GITHUB_OUTPUT
+        else
+          echo "No actual changes to types content"
+          echo "should-publish=false" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Build dual packages
       if: steps.check-changes.outputs.should-publish == 'true'
       run: |
-        echo "Building CommonJS and ES modules..."
+        echo "Building public and internal packages..."
         mkdir -p dist
         
-        # CommonJS build
+        # CommonJS - public
         tsc --module commonjs --target es2020 --outDir dist/cjs --declaration true index.ts
         mv dist/cjs/index.js dist/index.cjs
         
-        # ES module build
+        # ES module - public
         tsc --module es2020 --target es2020 --outDir dist/esm --declaration true index.ts
         mv dist/esm/index.js dist/index.mjs
         
-        # Types (same for both)
+        # Types - public
         cp dist/cjs/index.d.ts dist/index.d.ts
+        
+        # CommonJS - internal
+        tsc --module commonjs --target es2020 --outDir dist/cjs --declaration true internal.ts
+        mv dist/cjs/internal.js dist/internal.cjs
+        
+        # ES module - internal
+        tsc --module es2020 --target es2020 --outDir dist/esm --declaration true internal.ts
+        mv dist/esm/internal.js dist/internal.mjs
+        
+        # Types - internal
+        cp dist/cjs/internal.d.ts dist/internal.d.ts
         
         # Clean up temp dirs
         rm -rf dist/cjs dist/esm
