@@ -41,29 +41,39 @@ jobs:
     - name: Check for actual type changes
       id: check-changes
       run: |
+        # Track changes
         PUBLIC_CHANGED=false
         INTERNAL_CHANGED=false
         
-        # Check public types
+        # Check public types - if previous version exists and differs, mark changed
         if git show HEAD~1:index.ts > previous-public.ts 2>/dev/null; then
-          if ! diff -q index.ts previous-public.ts > /dev/null; then
+          if ! diff -q index.ts previous-public.ts > /dev/null 2>&1; then
+            echo "Public types content has changed"
             PUBLIC_CHANGED=true
+          else
+            echo "Public types content unchanged"
           fi
         else
+          echo "Public types file is new (no previous version)"
           PUBLIC_CHANGED=true
         fi
         
-        # Check internal types
+        # Check internal types - if previous version exists and differs, mark changed
         if git show HEAD~1:internal.ts > previous-internal.ts 2>/dev/null; then
-          if ! diff -q internal.ts previous-internal.ts > /dev/null; then
+          if ! diff -q internal.ts previous-internal.ts > /dev/null 2>&1; then
+            echo "Internal types content has changed"
             INTERNAL_CHANGED=true
+          else
+            echo "Internal types content unchanged"
           fi
         else
+          echo "Internal types file is new (no previous version)"
           INTERNAL_CHANGED=true
         fi
         
-        if [ "$PUBLIC_CHANGED" = true ] || [ "$INTERNAL_CHANGED" = true ]; then
-          echo "Types content has changed"
+        # Determine if we should publish
+        if [ "$PUBLIC_CHANGED" = "true" ] || [ "$INTERNAL_CHANGED" = "true" ]; then
+          echo "Types content has changed - will publish"
           echo "should-publish=true" >> $GITHUB_OUTPUT
         else
           echo "No actual changes to types content"
