@@ -3,8 +3,14 @@ name: Publish to NPM
 on:
   push:
     branches: [ main, next ]
-    paths: [ 'index.ts' ]
-  workflow_dispatch:   
+    paths: [ 'index.ts', 'internal.ts' ]  # Add internal.ts here!
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force publish even if no changes detected'
+        required: false
+        default: 'false'
+        type: boolean  
 
 permissions:
   id-token: write      # Required for OIDC/provenance
@@ -41,36 +47,79 @@ jobs:
     - name: Check for actual type changes
       id: check-changes
       run: |
-        # Compare current index.ts with previous commit
-        if git show HEAD~1:index.ts > previous.ts 2>/dev/null; then
-          if diff -q index.ts previous.ts > /dev/null; then
-            echo "No actual changes to types content"
-            echo "should-publish=false" >> $GITHUB_OUTPUT
+        # Check if force flag is set
+        if [ "${{ github.event.inputs.force }}" = "true" ]; then
+          echo "Force publish requested via workflow_dispatch"
+          echo "should-publish=true" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        # Track changes
+        PUBLIC_CHANGED=false
+        INTERNAL_CHANGED=false
+        
+        # Check public types - if previous version exists and differs, mark changed
+        if git show HEAD~1:index.ts > previous-public.ts 2>/dev/null; then
+          if ! diff -q index.ts previous-public.ts > /dev/null 2>&1; then
+            echo "Public types content has changed"
+            PUBLIC_CHANGED=true
           else
-            echo "Types content has changed"
-            echo "should-publish=true" >> $GITHUB_OUTPUT
+            echo "Public types content unchanged"
           fi
         else
-          echo "Previous version not found, treating as new"
-          echo "should-publish=true" >> $GITHUB_OUTPUT
+          echo "Public types file is new (no previous version)"
+          PUBLIC_CHANGED=true
         fi
-
+        
+        # Check internal types - if previous version exists and differs, mark changed
+        if git show HEAD~1:internal.ts > previous-internal.ts 2>/dev/null; then
+          if ! diff -q internal.ts previous-internal.ts > /dev/null 2>&1; then
+            echo "Internal types content has changed"
+            INTERNAL_CHANGED=true
+          else
+            echo "Internal types content unchanged"
+          fi
+        else
+          echo "Internal types file is new (no previous version)"
+          INTERNAL_CHANGED=true
+        fi
+        
+        # Determine if we should publish
+        if [ "$PUBLIC_CHANGED" = "true" ] || [ "$INTERNAL_CHANGED" = "true" ]; then
+          echo "Types content has changed - will publish"
+          echo "should-publish=true" >> $GITHUB_OUTPUT
+        else
+          echo "No actual changes to types content"
+          echo "should-publish=false" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Build dual packages
       if: steps.check-changes.outputs.should-publish == 'true'
       run: |
-        echo "Building CommonJS and ES modules..."
+        echo "Building public and internal packages..."
         mkdir -p dist
         
-        # CommonJS build
+        # CommonJS - public
         tsc --module commonjs --target es2020 --outDir dist/cjs --declaration true index.ts
         mv dist/cjs/index.js dist/index.cjs
         
-        # ES module build
+        # ES module - public
         tsc --module es2020 --target es2020 --outDir dist/esm --declaration true index.ts
         mv dist/esm/index.js dist/index.mjs
         
-        # Types (same for both)
+        # Types - public
         cp dist/cjs/index.d.ts dist/index.d.ts
+        
+        # CommonJS - internal
+        tsc --module commonjs --target es2020 --outDir dist/cjs --declaration true internal.ts
+        mv dist/cjs/internal.js dist/internal.cjs
+        
+        # ES module - internal
+        tsc --module es2020 --target es2020 --outDir dist/esm --declaration true internal.ts
+        mv dist/esm/internal.js dist/internal.mjs
+        
+        # Types - internal
+        cp dist/cjs/internal.d.ts dist/internal.d.ts
         
         # Clean up temp dirs
         rm -rf dist/cjs dist/esm

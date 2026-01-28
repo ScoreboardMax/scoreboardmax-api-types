@@ -1,9 +1,12 @@
 /**
- * ScoreboardMax API Types
- * 
- * This file contains type definitions for API consumers.
+ * ScoreboardMax API Types - Internal
+ *
+ * This file contains ALL type definitions including admin-only types.
  * These types are automatically generated from the ScoreboardMax API source code.
- * 
+ *
+ * Note: Admin types are only used in administrative applications and models with
+ * these interfaces will not be returned by the API to non-admin users.
+ *
  */
 
 export const isBaseballData = (data: any): data is BaseballDataResponse => {
@@ -357,6 +360,11 @@ export interface AccountResponse {
   token?: string;
 }
 
+export interface AccountResponseAdmin extends AccountResponse {
+  paymentProvider: string | null;
+  paymentProviderCustomerId: string | null;
+}
+
 export interface AppListResponse {
     url: string;
     uri: string;
@@ -423,6 +431,10 @@ export interface AuthRequest {
   dateExpires?: string;
 }
 
+export interface AuthRequestAdmin extends AuthRequest {
+  isAdmin: boolean;
+}
+
 export interface AuthResponse {
   object: string;
   authId: string;
@@ -441,6 +453,11 @@ export interface AuthResponse {
   dateNow: string;
   type: AuthType;
   token?: string;
+}
+
+export interface AuthResponseAdmin extends AuthResponse {
+  isAdmin: boolean;
+  isAssumed: boolean;
 }
 
 export interface AuthSignInRequest {
@@ -1349,6 +1366,13 @@ export interface UserListResponse {
   data: UserResponse[];
 }
 
+export interface UserListResponseAdmin {
+  url: string;
+  uri: string;
+  pageNext: string | null;
+  data: UserResponseAdmin[];
+}
+
 export interface UserRequest {
   email: string;
   name: string;
@@ -1371,9 +1395,18 @@ export interface UserResponse {
   dateLastActivity: string | null;
 }
 
+export interface UserResponseAdmin extends UserResponse {
+  isOwner: boolean;
+  isAdmin: boolean;
+}
+
 export interface UserUpdateRequest {
   name?: string;
   permissions?: Permissions;
+}
+
+export interface UserUpdateRequestAdmin extends UserUpdateRequest {
+  isOwner: boolean;
 }
 
 export interface VolleyballDataRequest {
