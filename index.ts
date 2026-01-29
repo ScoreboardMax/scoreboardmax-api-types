@@ -221,9 +221,7 @@ export enum MetaMessageType {
 export enum OAuthAction {
     NewUserCreated = "new_user_created",
     ExistingUserSignedIn = "existing_user_signed_in",
-    ProviderLinkedAndSignedIn = "provider_linked_and_signed_in",
-    RequiresUserDecision = "requires_user_decision",
-    NewAccountForExistingUser = "new_account_for_existing_user"
+    ProviderLinkedAndSignedIn = "provider_linked_and_signed_in"
 }
 
 export enum OAuthProvider {
@@ -828,10 +826,6 @@ export interface NumberInput extends BaseInput {
     step?: number;
 }
 
-export interface OAuthBindingRequest {
-    messageCipher: string;
-}
-
 export interface OAuthRequest {
     code: string;
     redirectUri: string;
@@ -844,7 +838,6 @@ export interface OAuthResponse {
     oAuthProviderId: string;
     oAuthProviderEmail: string;
     oAuthProviderName: string;
-    messageCipher?: string;
     dateNow: string;
     action: OAuthAction;
 }
