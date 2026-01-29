@@ -9,6 +9,14 @@
  *
  */
 
+export const isAccountResponseAdmin = (account: AccountResponse): account is AccountResponseAdmin => {
+  return "paymentProvider" in account && "paymentProviderCustomerId" in account;
+}
+
+export const isAuthResponseAdmin = (auth: AuthResponse): auth is AuthResponseAdmin => {
+  return "isAdmin" in auth;
+}
+
 export const isBaseballData = (data: any): data is BaseballDataResponse => {
   return data.type === ScoreboardType.Baseball;
 }
@@ -23,6 +31,14 @@ export const isFootballData = (data: any): data is FootballDataResponse => {
 
 export const isSoccerData = (data: any): data is SoccerDataResponse => {
   return data.type === ScoreboardType.Soccer;
+}
+
+export const isUserListResponseAdmin = (list: UserListResponse): list is UserListResponseAdmin => {
+  return list.data.length > 0 && isUserResponseAdmin(list.data[0]);
+}
+
+export const isUserResponseAdmin = (user: UserResponse): user is UserResponseAdmin => {
+  return "isAdmin" in user;
 }
 
 export const isVolleyballData = (data: any): data is VolleyballDataResponse => {
