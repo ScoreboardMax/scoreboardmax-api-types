@@ -151,6 +151,7 @@ export enum ErrorCode {
     InsufficientResourcePermissions = "InsufficientResourcePermissions",
     InsufficientResourceItemPermissions = "InsufficientResourceItemPermissions",
     InvalidAuthType = "InvalidAuthType",
+    InvalidCaptchaToken = "InvalidCaptchaToken",
     InvalidColorFormat = "InvalidColorFormat",
     InvalidDate = "InvalidDate",
     InvalidInput = "InvalidInput",
@@ -816,6 +817,7 @@ export interface NewAccountRequest {
   email: string;
   password: string;
   name?: string;
+  captchaToken?: string;
 }
 
 export interface NumberInput extends BaseInput {
