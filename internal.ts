@@ -77,6 +77,8 @@ export enum ApiResource {
     RosterList = "rosterList",
     Scoreboard = "scoreboard",
     ScoreboardList = "scoreboardList",
+    ScoreboardLog = "scoreboardLog",
+    ScoreboardLogList = "scoreboardLogList",
     Sponsor = "sponsor",
     SponsorList = "sponsorList",
     Team = "team",
