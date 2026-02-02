@@ -602,6 +602,7 @@ export interface BasketballSettings extends ScoreboardSettingsBase {
     shotClockLength?: number; 
     shotClockSecondaryLength?: number; 
     halfLength: number; 
+    overtimeLength?: number; 
     showGameClock: boolean;
     showShotClock: boolean;
     showTimeouts: boolean;
