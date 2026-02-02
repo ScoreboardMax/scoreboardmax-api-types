@@ -772,6 +772,7 @@ export interface FootballDataRequest {
     distanceToGo: string | null;
     flag: boolean;
     period: FootballPeriod;
+    overtimeNumber?: number;
     team1: FootballScoreboardTeamRequest;
     team2: FootballScoreboardTeamRequest;
     settings?: FootballSettingsRequest;
@@ -783,6 +784,7 @@ export interface FootballDataResponse {
     distanceToGo: string | null;
     flag: boolean;
     period: FootballPeriod;
+    overtimeNumber?: number;
     team1: FootballScoreboardTeamResponse;
     team2: FootballScoreboardTeamResponse;
     settings: FootballSettingsResponse;
@@ -806,6 +808,8 @@ export interface FootballSettings extends ScoreboardSettingsBase {
     playClockLength?: number;
     playClockSecondaryLength?: number;
     timeoutsPerHalf?: number;
+    overtimeLength?: number; 
+    overtimeHasClock: boolean;
     showGameClock: boolean;
     showPlayClock: boolean;
     showTimeouts: boolean;
