@@ -533,6 +533,7 @@ export interface BaseInput {
 
 export interface BasketballDataRequest {
     period: BasketballPeriod;
+    overtimeNumber?: number;
     team1: BasketballScoreboardTeamRequest;
     team2: BasketballScoreboardTeamRequest;
     settings?: BasketballSettingsRequest;
@@ -541,6 +542,7 @@ export interface BasketballDataRequest {
 export interface BasketballDataResponse {
     type: ScoreboardType;
     period: BasketballPeriod;
+    overtimeNumber?: number;
     team1: BasketballScoreboardTeamResponse;
     team2: BasketballScoreboardTeamResponse;
     settings: BasketballSettingsResponse;
