@@ -566,6 +566,7 @@ export interface BaseInput {
 
 export interface BasketballDataRequest {
     period: BasketballPeriod;
+    overtimeNumber?: number;
     team1: BasketballScoreboardTeamRequest;
     team2: BasketballScoreboardTeamRequest;
     settings?: BasketballSettingsRequest;
@@ -574,6 +575,7 @@ export interface BasketballDataRequest {
 export interface BasketballDataResponse {
     type: ScoreboardType;
     period: BasketballPeriod;
+    overtimeNumber?: number;
     team1: BasketballScoreboardTeamResponse;
     team2: BasketballScoreboardTeamResponse;
     settings: BasketballSettingsResponse;
@@ -770,6 +772,7 @@ export interface FootballDataRequest {
     distanceToGo: string | null;
     flag: boolean;
     period: FootballPeriod;
+    overtimeNumber?: number;
     team1: FootballScoreboardTeamRequest;
     team2: FootballScoreboardTeamRequest;
     settings?: FootballSettingsRequest;
@@ -781,6 +784,7 @@ export interface FootballDataResponse {
     distanceToGo: string | null;
     flag: boolean;
     period: FootballPeriod;
+    overtimeNumber?: number;
     team1: FootballScoreboardTeamResponse;
     team2: FootballScoreboardTeamResponse;
     settings: FootballSettingsResponse;
@@ -804,6 +808,8 @@ export interface FootballSettings extends ScoreboardSettingsBase {
     playClockLength?: number;
     playClockSecondaryLength?: number;
     timeoutsPerHalf?: number;
+    overtimeLength?: number; 
+    overtimeHasClock: boolean;
     showGameClock: boolean;
     showPlayClock: boolean;
     showTimeouts: boolean;
