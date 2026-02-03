@@ -1393,6 +1393,7 @@ export interface VolleyballDataResponse {
     team1: VolleyballScoreboardTeamResponse;
     team2: VolleyballScoreboardTeamResponse;
     settings: VolleyballSettingsResponse;
+    setFirstServingTeam: "team1" | "team2" | null;
 }
 
 export interface VolleyballScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
