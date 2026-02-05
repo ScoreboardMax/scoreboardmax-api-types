@@ -548,6 +548,53 @@ export interface BasketballDataResponse {
     settings: BasketballSettingsResponse;
 }
 
+export interface BasketballInsight {
+    team1: BasketballScoreboardTeam;
+    team2: BasketballScoreboardTeam;
+    timelinePoints: BasketballTimelinePoint[];
+    periodEndPoints: BasketballTimelinePoint[];
+    runs: BasketballRunSummary[];
+    periodLength: number;
+    overtimeLength: number;
+    gamePeriods: BasketballGamePeriods;
+    overtimeCount: number;
+    regulationLength: number;
+    gameLength: number;
+    leadChanges: number;
+    largestLeadPointTeam1: BasketballTimelinePoint | null;
+    largestLeadPointTeam2: BasketballTimelinePoint | null;
+}
+
+export interface BasketballInsightResponse {
+    team1: BasketballScoreboardTeamResponse;
+    team2: BasketballScoreboardTeamResponse;
+    timelinePoints: BasketballTimelinePointResponse[];
+    periodEndPoints: BasketballTimelinePointResponse[];
+    runs: BasketballRunSummaryResponse[];
+    periodLength: number;
+    overtimeLength: number;
+    gamePeriods: BasketballGamePeriods;
+    overtimeCount: number;
+    regulationLength: number;
+    gameLength: number;
+    leadChanges: number;
+    largestLeadPointTeam1: BasketballTimelinePointResponse | null;
+    largestLeadPointTeam2: BasketballTimelinePointResponse | null;
+}
+
+export interface BasketballRunSummary {
+    team: "team1" | "team2";
+    points: number;
+    opponentPoints: number;
+    startSeq: number;
+    endSeq: number;
+    startLeader: "team1" | "team2" | null;
+    endLeader: "team1" | "team2" | null;
+    causedLeadChange: boolean;
+}
+
+export interface BasketballRunSummaryResponse extends BasketballRunSummary {}
+
 export interface BasketballScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     score: number;
     timeoutsLeft: number;
@@ -593,6 +640,22 @@ export interface BasketballSettingsRequest extends BasketballSettings {
 
 export interface BasketballSettingsResponse extends BasketballSettings {
 }
+
+export interface BasketballTimelinePoint {
+    seq: number;
+    period: BasketballPeriod;
+    overtimeNumber?: number;
+    team1Score: number;
+    team2Score: number;
+    leader: "team1" | "team2" | null;
+    leadAmount: number;
+    periodSecondsRemaining?: number;
+    gameSecond?: number;
+    timeInferred?: boolean;
+    clockJumpAfter?: boolean;
+}
+
+export interface BasketballTimelinePointResponse extends BasketballTimelinePoint {}
 
 export interface BooleanInput extends BaseInput {
     type: "boolean";
@@ -793,6 +856,27 @@ export interface FootballSettingsRequest extends FootballSettings {
 }
 
 export interface FootballSettingsResponse extends FootballSettings {
+}
+
+export interface Insight {
+    scoreboardId: string;
+    sport: ScoreboardType;
+    dateStart: string; 
+    dateEnd: string; 
+    qualityScore: number; 
+    data: BasketballInsight; 
+}
+
+export interface InsightResponse {
+    object: string;
+    url: string;
+    uri: string;
+    scoreboardId: string;
+    sport: ScoreboardType;
+    dateStart: string;
+    dateEnd: string;
+    qualityScore: number;
+    data: BasketballInsightResponse; 
 }
 
 export interface MagicLinkResponse {
