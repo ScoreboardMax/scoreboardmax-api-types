@@ -93,6 +93,8 @@ export enum ApiResource {
     OverlayList = "overlayList",
     Preset = "preset",
     PresetList = "presetList",
+    Game = "game",
+    GameList = "gameList",
 }
 
 export enum AppType {
