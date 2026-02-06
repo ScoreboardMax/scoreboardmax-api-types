@@ -550,23 +550,6 @@ export interface BasketballDataResponse {
     settings: BasketballSettingsResponse;
 }
 
-export interface BasketballInsight {
-    team1: BasketballScoreboardTeam;
-    team2: BasketballScoreboardTeam;
-    timelinePoints: BasketballTimelinePoint[];
-    periodEndPoints: BasketballTimelinePoint[];
-    runs: BasketballRunSummary[];
-    periodLength: number;
-    overtimeLength: number;
-    gamePeriods: BasketballGamePeriods;
-    overtimeCount: number;
-    regulationLength: number;
-    gameLength: number;
-    leadChanges: number;
-    largestLeadPointTeam1: BasketballTimelinePoint | null;
-    largestLeadPointTeam2: BasketballTimelinePoint | null;
-}
-
 export interface BasketballInsightResponse {
     team1: BasketballScoreboardTeamResponse;
     team2: BasketballScoreboardTeamResponse;
@@ -860,13 +843,31 @@ export interface FootballSettingsRequest extends FootballSettings {
 export interface FootballSettingsResponse extends FootballSettings {
 }
 
-export interface Insight {
+export interface GameListResponse {
+    url: string;
+    uri: string;
+    pageNext: string | null;
+    data: GameResponse[];
+}
+
+export interface GameRequest {
+    description: string;
+}
+
+export interface GameResponse {
+    object: string;
+    url: string;
+    uri: string;
     scoreboardId: string;
+    gameId: string;
     sport: ScoreboardType;
-    dateStart: string; 
-    dateEnd: string; 
-    qualityScore: number; 
-    data: BasketballInsight; 
+    startLogId: string;
+    endLogId: string | null;
+    description: string;
+    dateGameStart: string;
+    dateGameEnd: string | null;
+    dateCreated: string;
+    dateModified: string;
 }
 
 export interface InsightResponse {
