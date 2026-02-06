@@ -551,8 +551,8 @@ export interface BasketballDataResponse {
 }
 
 export interface BasketballInsightResponse {
-    team1: BasketballScoreboardTeamResponse;
-    team2: BasketballScoreboardTeamResponse;
+    team1: BasketballInsightTeamResponse;
+    team2: BasketballInsightTeamResponse;
     timelinePoints: BasketballTimelinePointResponse[];
     periodEndPoints: BasketballTimelinePointResponse[];
     runs: BasketballRunSummaryResponse[];
