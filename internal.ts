@@ -612,7 +612,7 @@ export interface BasketballRunSummary {
     causedLeadChange: boolean;
 }
 
-export interface BasketballRunSummaryResponse extends BasketballRunSummary {}
+export interface BasketballRunSummaryResponse extends BasketballRunSummary { }
 
 export interface BasketballScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     score: number;
@@ -674,7 +674,7 @@ export interface BasketballTimelinePoint {
     clockJumpAfter?: boolean;
 }
 
-export interface BasketballTimelinePointResponse extends BasketballTimelinePoint {}
+export interface BasketballTimelinePointResponse extends BasketballTimelinePoint { }
 
 export interface BooleanInput extends BaseInput {
     type: "boolean";
