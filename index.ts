@@ -52,6 +52,7 @@ export enum ApiResource {
     AuthList = "authList",
     Clock = "clock",
     ClockList = "clockList",
+    Insight = "insight",
     Player = "player",
     PlayerList = "playerList",
     Roster = "roster",
@@ -862,10 +863,10 @@ export interface GameResponse {
     gameId: string;
     sport: ScoreboardType;
     startLogId: string;
-    endLogId: string | null;
+    endLogId?: string;
     description: string;
     dateGameStart: string;
-    dateGameEnd: string | null;
+    dateGameEnd?: string;
     dateCreated: string;
     dateModified: string;
 }
@@ -875,7 +876,7 @@ export interface InsightResponse {
     url: string;
     uri: string;
     scoreboardId: string;
-    sport: ScoreboardType;
+    scoreboardType: ScoreboardType;
     dateStart: string;
     dateEnd: string;
     qualityScore: number;
