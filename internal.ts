@@ -218,6 +218,7 @@ export enum FileType {
     AccountLogo = "accountLogo",
     PlayerPhoto = "playerPhoto",
     SponsorLogo = "sponsorLogo",
+    InsightLogo = "insightLogo",
     Temporary = "temporary",
 }
 
@@ -894,7 +895,7 @@ export interface GameResponse {
     uri: string;
     scoreboardId: string;
     gameId: string;
-    sport: ScoreboardType;
+    type: ScoreboardType;
     startLogId: string;
     endLogId?: string;
     description: string;
@@ -908,6 +909,7 @@ export interface InsightResponse {
     object: string;
     url: string;
     uri: string;
+    accountId: string;
     scoreboardId: string;
     scoreboardType: ScoreboardType;
     dateStart: string;
@@ -1408,7 +1410,7 @@ export interface TeamResponse {
 export interface TemplateDefinition {
     path: string;
     name: string;
-    sport: string;
+    sport: string; 
     useCases: TemplateUseCase[];
     thumbnail?: string;
     settings?: Record<string, InputDefinition>;
