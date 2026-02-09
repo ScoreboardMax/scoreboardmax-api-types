@@ -71,6 +71,7 @@ export enum ApiResource {
     AuthList = "authList",
     Clock = "clock",
     ClockList = "clockList",
+    Insight = "insight",
     Player = "player",
     PlayerList = "playerList",
     Roster = "roster",
@@ -93,6 +94,8 @@ export enum ApiResource {
     OverlayList = "overlayList",
     Preset = "preset",
     PresetList = "presetList",
+    Game = "game",
+    GameList = "gameList",
 }
 
 export enum AppType {
@@ -215,6 +218,7 @@ export enum FileType {
     AccountLogo = "accountLogo",
     PlayerPhoto = "playerPhoto",
     SponsorLogo = "sponsorLogo",
+    InsightLogo = "insightLogo",
     Temporary = "temporary",
 }
 
@@ -581,6 +585,36 @@ export interface BasketballDataResponse {
     settings: BasketballSettingsResponse;
 }
 
+export interface BasketballInsightResponse {
+    team1: BasketballInsightTeamResponse;
+    team2: BasketballInsightTeamResponse;
+    timelinePoints: BasketballTimelinePointResponse[];
+    periodEndPoints: BasketballTimelinePointResponse[];
+    runs: BasketballRunSummaryResponse[];
+    periodLength: number;
+    overtimeLength: number;
+    gamePeriods: BasketballGamePeriods;
+    overtimeCount: number;
+    regulationLength: number;
+    gameLength: number;
+    leadChanges: number;
+    largestLeadPointTeam1: BasketballTimelinePointResponse | null;
+    largestLeadPointTeam2: BasketballTimelinePointResponse | null;
+}
+
+export interface BasketballRunSummary {
+    team: "team1" | "team2";
+    points: number;
+    opponentPoints: number;
+    startSeq: number;
+    endSeq: number;
+    startLeader: "team1" | "team2" | null;
+    endLeader: "team1" | "team2" | null;
+    causedLeadChange: boolean;
+}
+
+export interface BasketballRunSummaryResponse extends BasketballRunSummary { }
+
 export interface BasketballScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     score: number;
     timeoutsLeft: number;
@@ -626,6 +660,22 @@ export interface BasketballSettingsRequest extends BasketballSettings {
 
 export interface BasketballSettingsResponse extends BasketballSettings {
 }
+
+export interface BasketballTimelinePoint {
+    seq: number;
+    period: BasketballPeriod;
+    overtimeNumber?: number;
+    team1Score: number;
+    team2Score: number;
+    leader: "team1" | "team2" | null;
+    leadAmount: number;
+    periodSecondsRemaining?: number;
+    gameSecond?: number;
+    timeInferred?: boolean;
+    clockJumpAfter?: boolean;
+}
+
+export interface BasketballTimelinePointResponse extends BasketballTimelinePoint { }
 
 export interface BooleanInput extends BaseInput {
     type: "boolean";
@@ -826,6 +876,46 @@ export interface FootballSettingsRequest extends FootballSettings {
 }
 
 export interface FootballSettingsResponse extends FootballSettings {
+}
+
+export interface GameListResponse {
+    url: string;
+    uri: string;
+    pageNext: string | null;
+    data: GameResponse[];
+}
+
+export interface GameRequest {
+    description: string;
+}
+
+export interface GameResponse {
+    object: string;
+    url: string;
+    uri: string;
+    scoreboardId: string;
+    gameId: string;
+    type: ScoreboardType;
+    startLogId: string;
+    endLogId?: string;
+    description: string;
+    dateGameStart: string;
+    dateGameEnd?: string;
+    dateCreated: string;
+    dateModified: string;
+}
+
+export interface InsightResponse {
+    object: string;
+    url: string;
+    uri: string;
+    accountId: string;
+    scoreboardId: string;
+    scoreboardType: ScoreboardType;
+    dateStart: string;
+    dateEnd: string;
+    qualityScore: number;
+    data: BasketballInsightResponse; 
 }
 
 export interface MagicLinkResponse {
@@ -1320,7 +1410,7 @@ export interface TeamResponse {
 export interface TemplateDefinition {
     path: string;
     name: string;
-    sport: string;
+    sport: string; 
     useCases: TemplateUseCase[];
     thumbnail?: string;
     settings?: Record<string, InputDefinition>;
