@@ -569,6 +569,13 @@ export interface BasketballInsightResponse {
     largestLeadPointTeam2: BasketballTimelinePointResponse | null;
 }
 
+export interface BasketballInsightTeamResponse {
+    name: string;
+    color: string;
+    logoUrl: string | null;
+    score: number;
+}
+
 export interface BasketballRunSummary {
     team: "team1" | "team2";
     points: number;
