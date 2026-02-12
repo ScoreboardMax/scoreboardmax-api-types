@@ -588,8 +588,8 @@ export interface BasketballDataResponse {
 export interface BasketballInsightResponse {
     team1: BasketballInsightTeamResponse;
     team2: BasketballInsightTeamResponse;
-    timelinePoints: BasketballTimelinePointResponse[];
-    periodEndPoints: BasketballTimelinePointResponse[];
+    timelinePoints: TimelinePointResponse[];
+    periodEndPoints: TimelinePointResponse[];
     runs: BasketballRunSummaryResponse[];
     periodLength: number;
     overtimeLength: number;
@@ -598,12 +598,13 @@ export interface BasketballInsightResponse {
     regulationLength: number;
     gameLength: number;
     leadChanges: number;
-    largestLeadPointTeam1: BasketballTimelinePointResponse | null;
-    largestLeadPointTeam2: BasketballTimelinePointResponse | null;
+    largestLeadPointTeam1: TimelinePointResponse | null;
+    largestLeadPointTeam2: TimelinePointResponse | null;
 }
 
 export interface BasketballInsightTeamResponse {
     name: string;
+    abbreviation: string;
     color: string;
     logoUrl: string | null;
     score: number;
@@ -667,22 +668,6 @@ export interface BasketballSettingsRequest extends BasketballSettings {
 
 export interface BasketballSettingsResponse extends BasketballSettings {
 }
-
-export interface BasketballTimelinePoint {
-    seq: number;
-    period: BasketballPeriod;
-    overtimeNumber?: number;
-    team1Score: number;
-    team2Score: number;
-    leader: "team1" | "team2" | null;
-    leadAmount: number;
-    periodSecondsRemaining?: number;
-    gameSecond?: number;
-    timeInferred?: boolean;
-    clockJumpAfter?: boolean;
-}
-
-export interface BasketballTimelinePointResponse extends BasketballTimelinePoint { }
 
 export interface BooleanInput extends BaseInput {
     type: "boolean";
@@ -1436,6 +1421,22 @@ export interface TextInput extends BaseInput {
     default: string;
     maxLength?: number;
 }
+
+export interface TimelinePoint {
+    seq: number;
+    period: string | null;
+    overtimeNumber?: number;
+    team1Score: number;
+    team2Score: number;
+    leader: "team1" | "team2" | null;
+    leadAmount: number;
+    periodSecondsRemaining?: number;
+    gameSecond?: number;
+    timeInferred?: boolean;
+    clockJumpAfter?: boolean;
+}
+
+export interface TimelinePointResponse extends TimelinePoint { }
 
 export interface UploadSessionRequest {
     filename: string;
