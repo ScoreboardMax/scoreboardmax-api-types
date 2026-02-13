@@ -903,10 +903,11 @@ export interface InsightResponse {
     uri: string;
     accountId: string;
     scoreboardId: string;
+    gameId: string;
     scoreboardType: ScoreboardType;
     dateCreated: string; 
-    dateStart: string;
-    dateEnd: string;
+    dateGameStart: string;
+    dateGameEnd?: string;
     qualityScore: number;
     data: BasketballInsightResponse; 
 }
