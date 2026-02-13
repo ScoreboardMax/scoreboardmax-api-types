@@ -904,6 +904,7 @@ export interface InsightResponse {
     accountId: string;
     scoreboardId: string;
     scoreboardType: ScoreboardType;
+    dateCreated: string; 
     dateStart: string;
     dateEnd: string;
     qualityScore: number;
