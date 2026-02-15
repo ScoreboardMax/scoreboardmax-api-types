@@ -600,6 +600,14 @@ export interface BasketballInsightResponse {
     leadChanges: number;
     largestLeadPointTeam1: TimelinePointResponse | null;
     largestLeadPointTeam2: TimelinePointResponse | null;
+    periodStats: BasketballPeriodStatsResponse[];
+    team1TimeLeadingPercent: number;
+    team2TimeLeadingPercent: number;
+    team1ShotBreakdown: BasketballShotBreakdownResponse;
+    team2ShotBreakdown: BasketballShotBreakdownResponse;
+    ties: number;
+    largestStreakTeam1: BasketballLargestStreakResponse | null;
+    largestStreakTeam2: BasketballLargestStreakResponse | null;
 }
 
 export interface BasketballInsightTeamResponse {
@@ -609,6 +617,36 @@ export interface BasketballInsightTeamResponse {
     logoUrl: string | null;
     score: number;
 }
+
+export interface BasketballLargestStreak {
+    team: "team1" | "team2";
+    points: number;
+    opponentPoints: number;
+    periodRange: string;
+    startPeriodIndex: number;
+    endPeriodIndex: number;
+}
+
+export interface BasketballLargestStreakResponse extends BasketballLargestStreak { }
+
+export interface BasketballPeriodStats {
+    periodIndex: number;
+    periodLabel: string;
+    team1Points: number;
+    team2Points: number;
+    team1CumulativeScore: number;
+    team2CumulativeScore: number;
+    leadChanges: number;
+    ties: number;
+    largestLeadAmount: number;
+    largestLeadTeam: "team1" | "team2" | null;
+    largestLeadClockSeconds: number | null;
+    largestStreakTeam: "team1" | "team2" | null;
+    largestStreakPoints: number;
+    largestStreakOpponentPoints: number;
+}
+
+export interface BasketballPeriodStatsResponse extends BasketballPeriodStats { }
 
 export interface BasketballRunSummary {
     team: "team1" | "team2";
@@ -668,6 +706,14 @@ export interface BasketballSettingsRequest extends BasketballSettings {
 
 export interface BasketballSettingsResponse extends BasketballSettings {
 }
+
+export interface BasketballShotBreakdown {
+    freeThrows: number;
+    twoPointers: number;
+    threePointers: number;
+}
+
+export interface BasketballShotBreakdownResponse extends BasketballShotBreakdown { }
 
 export interface BooleanInput extends BaseInput {
     type: "boolean";
