@@ -46,6 +46,16 @@ export interface AccountResponseAdmin extends AccountResponse {
 }
 
 /**
+ * AI-generated talking points for a game
+ */
+export interface TalkingPointsResponse {
+    /** Each element is a discrete talking point */
+    content: string[];
+    /** When the talking points were generated (ISO 8601) */
+    dateCreated: string;
+}
+
+/**
  * API action identifiers
  */
 export enum ApiAction {
@@ -249,6 +259,17 @@ export interface BaseInput {
     label: string;
     description?: string;
     default: any;
+}
+
+/**
+ * Base insight team response shared across sports
+ */
+export interface InsightTeamBaseResponse {
+    name: string;
+    abbreviation: string;
+    color: string;
+    logoUrl: string | null;
+    reference: string;
 }
 
 /**
@@ -467,11 +488,7 @@ export interface BasketballSettings extends ScoreboardSettingsBase {
 /**
  * Basketball insight team statistics
  */
-export interface BasketballInsightTeamResponse {
-    name: string;
-    abbreviation: string;
-    color: string;
-    logoUrl: string | null;
+export interface BasketballInsightTeamResponse extends InsightTeamBaseResponse {
     score: number;
 }
 
@@ -778,6 +795,14 @@ export enum DownAndDistanceDisplay {
 }
 
 /**
+ * Energy level for talking points generation
+ */
+export enum TalkingPointEnergy {
+    Standard = "standard",
+    Hype = "hype",
+}
+
+/**
  * Event action identifiers
  */
 export enum EventAction {
@@ -872,6 +897,15 @@ export enum FileType {
     SponsorLogo = "sponsorLogo",
     InsightLogo = "insightLogo",
     Temporary = "temporary",
+}
+
+/**
+ * Focus area for talking points generation
+ */
+export enum TalkingPointFocus {
+    Story = "story",
+    Balanced = "balanced",
+    Stats = "stats",
 }
 
 /**
@@ -992,6 +1026,7 @@ export interface InsightResponse {
     dateGameEnd?: string;
     qualityScore: number;
     data: BasketballInsightResponse; 
+    talkingPoints: TalkingPointsResponse[];
 }
 
 /**
@@ -1336,6 +1371,20 @@ export interface PlayerSummaryResponse {
     imagePreviewUrl: string | null;
     imageMediumUrl: string | null;
     reference: string;
+}
+
+/**
+ * Preferences for tuning AI-generated talking points
+ */
+export interface TalkingPointPreferencesRequest {
+    /** Browser locale code (e.g., "en-US", "es-MX"). When set, talking points are generated in this language. */
+    language?: string;
+    /** Team reference from the insight document. When set, commentary is framed from that team's perspective. */
+    teamPerspective?: string;
+    /** Energy level: "standard" for neutral commentary, "hype" for excited, emphatic language. */
+    energy?: TalkingPointEnergy;
+    /** Focus area: "story" for narrative, "balanced" for even coverage, "stats" for statistical analysis. */
+    focus?: TalkingPointFocus;
 }
 
 /**
