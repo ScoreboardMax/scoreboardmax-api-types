@@ -326,6 +326,7 @@ export interface BaseballDataRequest {
     runnerOnFirst: boolean;
     runnerOnSecond: boolean;
     runnerOnThird: boolean;
+    isFinal: boolean;
     team1: BaseballScoreboardTeamRequest;
     team2: BaseballScoreboardTeamRequest;
     settings?: BaseballSettingsRequest;
@@ -344,6 +345,7 @@ export interface BaseballDataResponse {
     runnerOnFirst: boolean;
     runnerOnSecond: boolean;
     runnerOnThird: boolean;
+    isFinal: boolean;
     team1: BaseballScoreboardTeamResponse;
     team2: BaseballScoreboardTeamResponse;
     settings: BaseballSettingsResponse;
@@ -565,6 +567,7 @@ export enum BasketballPeriod {
     Third = "3",
     Fourth = "4",
     Overtime = "overtime",
+    Final = "final",
 }
 
 /**
@@ -971,6 +974,7 @@ export enum FootballPeriod {
     Third = "3",
     Fourth = "4",
     Overtime = "overtime",
+    Final = "final",
 }
 
 /**
@@ -1689,6 +1693,7 @@ export enum SoccerPeriod {
     ExtraTime1 = "ET 1",
     ExtraTime2 = "ET 2",
     Shootout = "shootout",
+    Final = "final",
 }
 
 /**
@@ -2178,6 +2183,7 @@ export enum VolleyballSet {
     Third = "3",
     Fourth = "4",
     Fifth = "5",
+    Final = "final",
 }
 
 /**
@@ -2388,7 +2394,8 @@ export enum WrestlingPeriod {
     First = "1",
     Second = "2",
     Third = "3",
-    Overtime = "overtime"
+    Overtime = "overtime",
+    Final = "final",
 }
 
 /**
