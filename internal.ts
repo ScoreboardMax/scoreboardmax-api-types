@@ -1903,7 +1903,8 @@ export interface TemplateDefinition {
     name: string;
     scoreboardType: string;
     useCases: TemplateUseCase[];
-    thumbnail?: string;
+    description?: string;
+    previewImages?: string[];
     settings?: Record<string, InputDefinition>;
 }
 
