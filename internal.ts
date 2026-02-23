@@ -1901,7 +1901,7 @@ export interface TeamResponse {
 export interface TemplateDefinition {
     path: string;
     name: string;
-    sport: string; 
+    scoreboardType: string;
     useCases: TemplateUseCase[];
     thumbnail?: string;
     settings?: Record<string, InputDefinition>;
