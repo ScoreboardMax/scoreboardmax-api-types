@@ -140,11 +140,6 @@ export interface AppResponse {
 export type InputDefinition = SelectInput | BooleanInput | ColorInput | TextInput | NumberInput | RangeInput;
 
 /**
- * App input field selection
- */
-export type InputSelection = Record<string, string | number | boolean>;
-
-/**
  * App manifest definition
  */
 export interface AppManifest {
@@ -1906,7 +1901,7 @@ export interface TeamResponse {
 export interface TemplateDefinition {
     path: string;
     name: string;
-    sport: string; 
+    scoreboardType: string;
     useCases: TemplateUseCase[];
     thumbnail?: string;
     settings?: Record<string, InputDefinition>;
@@ -1920,7 +1915,7 @@ export interface TemplateSelection {
     appId: string;
     useCase: TemplateUseCase;
     version?: string; 
-    settings?: Record<string, InputSelection>;
+    settings?: Record<string, string | number | boolean | null>;
 }
 
 /**
