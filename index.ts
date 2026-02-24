@@ -97,6 +97,8 @@ export enum ApiResource {
     PresetList = "presetList",
     Game = "game",
     GameList = "gameList",
+    Template = "template",
+    TemplateList = "templateList",
 }
 
 /**
@@ -121,6 +123,41 @@ export interface AppResponse {
     manifest: AppManifest;
     accountId: string;
     dateCreated: string;
+}
+
+/**
+ * App entitlement details response
+ */
+export interface AppEntitlementResponse {
+    object: string;
+    url: string;
+    uri: string;
+    accountId: string;
+    appEntitlementId: string;
+    type: AppEntitlementType;
+    appId: string;
+    key: string;
+    grantedBy: AppEntitlementGrantedBy;
+    grantedAt: string;
+    dateExpires?: string;
+    dateCreated: string;
+    dateModified: string;
+}
+
+/**
+ * App entitlement grant source
+ */
+export enum AppEntitlementGrantedBy {
+    Payment = "payment",
+    Promotion = "promotion",
+    Admin = "admin",
+}
+
+/**
+ * App entitlement type
+ */
+export enum AppEntitlementType {
+    Template = "template"
 }
 
 /**
@@ -775,6 +812,15 @@ export enum TalkingPointEnergy {
 }
 
 /**
+ * Entitlement requirement for access control
+ */
+export enum AppEntitlementRequirement {
+    None = "none",
+    AccountSubscription = "accountSubscription",
+    Payment = "payment",
+}
+
+/**
  * Event action identifiers
  */
 export enum EventAction {
@@ -1155,6 +1201,16 @@ export interface ScoreboardActivationListResponse {
 }
 
 /**
+ * Paginated list of app entitlements
+ */
+export interface AppEntitlementListResponse {
+    url: string;
+    uri: string;
+    pageNext: string | null;
+    data: AppEntitlementResponse[];
+}
+
+/**
  * Paginated list of apps
  */
 export interface AppListResponse {
@@ -1260,6 +1316,16 @@ export interface TeamListResponse {
   uri: string;
   pageNext: string | null;
   data: TeamResponse[];
+}
+
+/**
+ * Paginated list of templates
+ */
+export interface TemplateListResponse {
+    url: string;
+    uri: string;
+    pageNext: string | null;
+    data: TemplateResponse[];
 }
 
 /**
@@ -1870,14 +1936,42 @@ export interface TeamResponse {
 }
 
 /**
- * Template layout definition
+ * Template details response
  */
-export interface TemplateDefinition {
+export interface TemplateResponse {
+    object: string;
+    url: string;
+    uri: string;
+    appId: string;
+    key: string;
+    version: string;
     path: string;
     name: string;
     scoreboardType: string;
     useCases: TemplateUseCase[];
-    thumbnail?: string;
+    description?: string;
+    previewImages?: string[];
+    settings?: Record<string, InputDefinition>;
+    accountId: string;
+    latest: boolean;
+    published: boolean;
+    appEntitlementRequirement: AppEntitlementRequirement;
+    entitled?: boolean;
+    dateCreated: string;
+    dateModified: string;
+}
+
+/**
+ * Template layout definition
+ */
+export interface TemplateDefinition {
+    key: string;
+    path: string;
+    name: string;
+    scoreboardType: string;
+    useCases: TemplateUseCase[];
+    description?: string;
+    previewImages?: string[];
     settings?: Record<string, InputDefinition>;
 }
 
@@ -1885,11 +1979,17 @@ export interface TemplateDefinition {
  * Template selection configuration
  */
 export interface TemplateSelection {
-    path: string;
+    key: string;
     appId: string;
     useCase: TemplateUseCase;
     version?: string; 
     settings?: Record<string, string | number | boolean | null>;
+}
+
+/**
+ * Template update request
+ */
+export interface TemplateRequest {
 }
 
 /**
