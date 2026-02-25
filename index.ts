@@ -1950,7 +1950,7 @@ export interface TemplateResponse {
     scoreboardType: string;
     useCases: TemplateUseCase[];
     description?: string;
-    previewImages?: string[];
+    previewImageUrls?: string[];
     settings?: Record<string, InputDefinition>;
     accountId: string;
     latest: boolean;
