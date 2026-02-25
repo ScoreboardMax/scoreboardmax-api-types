@@ -2018,6 +2018,12 @@ export interface TemplateSelectionRequest extends TemplateSelection {
 }
 
 /**
+ * Template selection response for scoreboard template updates
+ */
+export interface TemplateSelectionResponse extends TemplateSelection {
+}
+
+/**
  * Template update request
  */
 export interface TemplateRequest {
