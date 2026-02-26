@@ -1565,7 +1565,6 @@ export interface ScoreboardRequest {
   type: ScoreboardType;
   version: number;
   data: BasketballDataRequest | FootballDataRequest | VolleyballDataRequest | SoccerDataRequest | BaseballDataRequest | WrestlingDataRequest;
-  templates?: TemplateSelection[];
 }
 
 /**
@@ -1950,7 +1949,7 @@ export interface TemplateResponse {
     scoreboardType: string;
     useCases: TemplateUseCase[];
     description?: string;
-    previewImages?: string[];
+    previewImageUrls?: string[];
     settings?: Record<string, InputDefinition>;
     accountId: string;
     latest: boolean;
@@ -1984,6 +1983,18 @@ export interface TemplateSelection {
     useCase: TemplateUseCase;
     version?: string; 
     settings?: Record<string, string | number | boolean | null>;
+}
+
+/**
+ * Template selection request for updating scoreboard templates
+ */
+export interface TemplateSelectionRequest extends TemplateSelection {
+}
+
+/**
+ * Template selection response for scoreboard template updates
+ */
+export interface TemplateSelectionResponse extends TemplateSelection {
 }
 
 /**
