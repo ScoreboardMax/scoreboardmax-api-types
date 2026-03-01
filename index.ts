@@ -1166,8 +1166,7 @@ export enum OAuthProvider {
 export interface OverlayRequest {
     type: "players" | "sponsors";
     data: PlayerSummaryRequest[] | SponsorSummaryRequest[];
-    title?: string | null;
-    color?: string;
+    title?: string;
 }
 
 /**
@@ -1176,8 +1175,7 @@ export interface OverlayRequest {
 export interface OverlayResponse {
     type: "players" | "sponsors";
     data: PlayerSummaryResponse[] | SponsorSummaryResponse[];
-    title?: string | null;
-    color?: string;
+    title?: string;
 }
 
 /**
@@ -1394,6 +1392,7 @@ export interface PlayerSummaryRequest {
     position: string | null;
     imageFilename: string | null;
     reference?: string;
+    teamReference: string;
 }
 
 /**
@@ -1410,6 +1409,7 @@ export interface PlayerSummaryResponse {
     imagePreviewUrl: string | null;
     imageMediumUrl: string | null;
     reference: string;
+    teamReference: string;
 }
 
 /**
