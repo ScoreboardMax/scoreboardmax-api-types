@@ -394,9 +394,9 @@ export interface BaseballScoreboardTeamRequest extends ScoreboardTeamBaseRequest
     hits: number;
     errors: number;
     pitcher: PlayerSummaryRequest | null;
-    pitchCount: Record<string, number>;
+    pitcherStats: PitcherStatsRequest[];
     batter: PlayerSummaryRequest | null;
-    battingRecord: Record<string, (boolean | null)[]>;
+    battingRecord: BattingRecordRequest[];
     battingList: PlayerSummaryRequest[];
     isHomeTeam: boolean;
 }
@@ -410,9 +410,9 @@ export interface BaseballScoreboardTeamResponse extends ScoreboardTeamBaseRespon
     hits: number;
     errors: number;
     pitcher: PlayerSummaryResponse | null;
-    pitchCount: Record<string, number>;
+    pitcherStats: PitcherStatsResponse[];
     batter: PlayerSummaryResponse | null;
-    battingRecord: Record<string, (boolean | null)[]>;
+    battingRecord: BattingRecordResponse[];
     battingList: PlayerSummaryResponse[];
     isHomeTeam: boolean;
 }
@@ -671,6 +671,24 @@ export enum BasketballTimeoutAllocation {
     PerGame = "perGame",
     PerHalf = "perHalf",
 }
+
+/**
+ * Batting record
+ */
+export interface BattingRecord {
+    playerId: string;
+    results: (boolean | null)[];
+}
+
+/**
+ * Batting record request
+ */
+export interface BattingRecordRequest extends BattingRecord { }
+
+/**
+ * Batting record response
+ */
+export interface BattingRecordResponse extends BattingRecord { }
 
 /**
  * Boolean toggle input type
@@ -1342,6 +1360,26 @@ export interface UserListResponse {
 export type PermissionItem = {
     [uri: string]: ApiAction[];
 };
+
+/**
+ * Pitcher stats
+ */
+export interface PitcherStats {
+    playerId: string;
+    pitchCount?: number;
+    strikeouts?: number;
+    walks?: number;
+}
+
+/**
+ * Pitcher stats request
+ */
+export interface PitcherStatsRequest extends PitcherStats { }
+
+/**
+ * Pitcher stats response
+ */
+export interface PitcherStatsResponse extends PitcherStats { }
 
 /**
  * Player creation/update request
