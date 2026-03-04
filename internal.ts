@@ -1655,6 +1655,7 @@ export interface ScoreboardResponse {
   currentServerTimestamp: number;
   clocks: ClockListResponse | string;
   overlay: OverlayResponse | string;
+  undoCount: number;
   version: number;
   templates: TemplateSelection[];
 }
@@ -1673,6 +1674,13 @@ export interface ScoreboardQrPdfRequest {
  */
 export interface ScoreboardQrPdfResponse {
   url: string;
+}
+
+/**
+ * Scoreboard undo request
+ */
+export interface ScoreboardUndoRequest {
+  version: number;
 }
 
 /**
