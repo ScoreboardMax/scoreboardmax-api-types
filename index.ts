@@ -676,7 +676,7 @@ export enum BasketballTimeoutAllocation {
  * Batting record
  */
 export interface BattingRecord {
-    playerId: string;
+    playerReference: string;
     results: (boolean | null)[];
 }
 
@@ -1365,7 +1365,7 @@ export type PermissionItem = {
  * Pitcher stats
  */
 export interface PitcherStats {
-    playerId: string;
+    playerReference: string;
     pitchCount?: number;
     strikeouts?: number;
     walks?: number;
