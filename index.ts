@@ -7,6 +7,16 @@
  */
 
 /**
+ * A single plate appearance with its result and optional count data.
+ * When the client records a result, it includes the ball/strike count at that moment.
+ */
+export interface PlateAppearance {
+    result: PlateAppearanceResult;
+    balls?: number;
+    strikes?: number;
+}
+
+/**
  * Account creation/update request
  */
 export interface AccountRequest {
@@ -358,6 +368,22 @@ export interface BaseballDataResponse {
 }
 
 /**
+ * Baseball game insight analytics response
+ */
+export interface BaseballInsightResponse {
+    team1: BaseballInsightTeamResponse;
+    team2: BaseballInsightTeamResponse;
+    inning: number;
+    inningSegment: BaseballInningSegment;
+    balls: number | null;
+    strikes: number | null;
+    outs: number | null;
+    final: boolean;
+    leadChanges: number;
+    ties: number;
+}
+
+/**
  * Baseball game settings model
  */
 export interface BaseballSettings extends ScoreboardSettingsBase {
@@ -372,6 +398,34 @@ export interface BaseballSettings extends ScoreboardSettingsBase {
     enableClockAutomations: boolean;
     innings: number;
 }
+
+/**
+ * Baseball insight team statistics response
+ */
+export interface BaseballInsightTeam {
+    name: string;
+    abbreviation: string;
+    color: string;
+    logoUrl: string | null;
+    runs: number;
+    pitchCount: number;
+    balls: number;
+    strikes: number;
+    isHomeTeam: boolean;
+    reference: string;
+    largestLeadAmount: number | null;
+    largestLeadInning: number | null;
+    batter: BaseballBatterSummary | null;
+    pitcher: BaseballPitcherSummary | null;
+    inningSummaries: BaseballInningSummary[];
+    batterSummaries: BaseballBatterSummary[];
+    pitcherSummaries: BaseballPitcherSummary[];
+}
+
+/**
+ * Baseball insight team statistics response
+ */
+export interface BaseballInsightTeamResponse extends BaseballInsightTeam { }
 
 /**
  * Baseball settings request
@@ -393,6 +447,9 @@ export interface BaseballScoreboardTeamRequest extends ScoreboardTeamBaseRequest
     inningRuns: number[];
     hits: number;
     errors: number;
+    pitchCount?: number;
+    balls?: number;
+    strikes?: number;
     pitcher: PlayerSummaryRequest | null;
     pitcherStats: PitcherStatsRequest[];
     batter: PlayerSummaryRequest | null;
@@ -409,6 +466,9 @@ export interface BaseballScoreboardTeamResponse extends ScoreboardTeamBaseRespon
     inningRuns: number[];
     hits: number;
     errors: number;
+    pitchCount?: number;
+    balls?: number;
+    strikes?: number;
     pitcher: PlayerSummaryResponse | null;
     pitcherStats: PitcherStatsResponse[];
     batter: PlayerSummaryResponse | null;
@@ -677,7 +737,7 @@ export enum BasketballTimeoutAllocation {
  */
 export interface BattingRecord {
     playerReference: string;
-    results: (boolean | null)[];
+    plateAppearances: PlateAppearance[];
 }
 
 /**
@@ -1062,7 +1122,7 @@ export interface InsightResponse {
     dateGameStart: string;
     dateGameEnd?: string;
     qualityScore: number;
-    data: BasketballInsightResponse; 
+    data: BasketballInsightResponse | BaseballInsightResponse; 
     talkingPoints: TalkingPointsResponse[];
 }
 
@@ -1355,6 +1415,77 @@ export interface UserListResponse {
 }
 
 /**
+ * Per-inning summary statistics
+ */
+export interface BaseballInningSummary {
+    inning: number;
+    isBattingComplete: boolean;
+    isPitchingComplete: boolean;
+    runs: number;
+    hits: number;
+    errors: number;
+    cumulativeRuns: number;
+    pitchCount: number;
+    strikeoutsAt: number[];
+    walksAt: number[];
+    runsAt: number[];
+    hitsAt: number[];
+    outsAt: number[];
+    pitcherChangedAt: number[];
+    runnerOnFirst: boolean;
+    runnerOnSecond: boolean;
+    runnerOnThird: boolean;
+    plateAppearances: BaseballPlateAppearance[];
+    pitchPerformanceScore: number[];
+}
+
+/**
+ * Per-pitcher game stats for the pitching overview visualization
+ */
+export interface BaseballPitcherSummary {
+    playerReference: string;
+    playerName: string;
+    playerNumber: string | null;
+    pitchCount: number;
+    strikeouts: number;
+    walks: number;
+    balls: number;
+    strikes: number;
+}
+
+/**
+ * Per-plate-appearance record within an inning
+ */
+export interface BaseballPlateAppearance {
+    /** Global sequence number for this PA (1..N) */
+    seq: number;
+    /** Batter identity */
+    playerReference: string;
+    playerName: string;
+    playerNumber: string | null;
+    /** Outcome of this plate appearance */
+    result: PlateAppearanceResult;
+    /** Number of pitches thrown during this PA */
+    pitchCount: number;
+    /** Whether this PA ended in a strikeout */
+    isStrikeout: boolean;
+    /** Number of balls thrown during this PA */
+    balls: number;
+    /** Number of strikes thrown during this PA */
+    strikes: number;
+}
+
+/**
+ * Per-player batting summary for the batting matrix visualization
+ */
+export interface BaseballBatterSummary {
+    playerReference: string;
+    playerName: string;
+    playerNumber: string | null;
+    plateAppearances: PlateAppearance[];
+}
+
+/**
  * Permission URI-to-actions mapping
  */
 export type PermissionItem = {
@@ -1380,6 +1511,20 @@ export interface PitcherStatsRequest extends PitcherStats { }
  * Pitcher stats response
  */
 export interface PitcherStatsResponse extends PitcherStats { }
+
+/**
+ * Plate appearance result type
+ */
+export enum PlateAppearanceResult {
+    Hit = "hit",
+    Out = "out",
+    NoAb = "noAb",
+    Walk = "walk",
+    HitByPitch = "hitByPitch",
+    Sacrifice = "sacrifice",
+    Error = "error",
+    FieldersChoice = "fieldersChoice",
+}
 
 /**
  * Player creation/update request
