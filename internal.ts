@@ -482,6 +482,7 @@ export interface BaseballScoreboardTeamRequest extends ScoreboardTeamBaseRequest
     battingRecord: BattingRecordRequest[];
     battingList: PlayerSummaryRequest[];
     isHomeTeam: boolean;
+    initialBattingListSize?: number;
 }
 
 /**
@@ -501,6 +502,7 @@ export interface BaseballScoreboardTeamResponse extends ScoreboardTeamBaseRespon
     battingRecord: BattingRecordResponse[];
     battingList: PlayerSummaryResponse[];
     isHomeTeam: boolean;
+    initialBattingListSize?: number;
 }
 
 /**
