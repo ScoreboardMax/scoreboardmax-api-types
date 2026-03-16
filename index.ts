@@ -381,6 +381,7 @@ export interface BaseballInsightResponse {
     final: boolean;
     leadChanges: number;
     ties: number;
+    innings: number;
 }
 
 /**
@@ -416,6 +417,7 @@ export interface BaseballInsightTeam {
     largestLeadAmount: number | null;
     largestLeadInning: number | null;
     batter: BaseballBatterSummary | null;
+    onDeck: BaseballBatterSummary | null;
     pitcher: BaseballPitcherSummary | null;
     inningSummaries: BaseballInningSummary[];
     batterSummaries: BaseballBatterSummary[];
@@ -1453,6 +1455,9 @@ export interface BaseballPitcherSummary {
     walks: number;
     balls: number;
     strikes: number;
+    hits: number;
+    /** Average pitches per completed plate appearance (null if no completed PAs) */
+    pitchesPerPlateAppearance: number | null;
 }
 
 /**
