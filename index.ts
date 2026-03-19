@@ -1910,8 +1910,9 @@ export interface SoccerSettings extends ScoreboardSettingsBase {
     extraTimeLabel: ExtraTimeLabel;
     hasStoppageTime: boolean;
     hidePenaltyCardAfter: number; 
-    enableEventStats: boolean; 
+    enableShotStats: boolean; 
     enablePossession: boolean; 
+    isCumulativeClock: boolean;
 }
 
 /**
@@ -1983,8 +1984,6 @@ export interface SoccerScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     penaltyCard?: SoccerPenaltyCardRequest;
     shotsOffTarget: number;
     shotsOnTarget: number;
-    corners: number;
-    fouls: number;
     yellowCards: number;
     redCards: number;
     possession: boolean;
@@ -2000,8 +1999,6 @@ export interface SoccerScoreboardTeamResponse extends ScoreboardTeamBaseResponse
     penaltyCard?: SoccerPenaltyCardResponse;
     shotsOffTarget: number;
     shotsOnTarget: number;
-    corners: number;
-    fouls: number;
     yellowCards: number;
     redCards: number;
     possession: boolean;
