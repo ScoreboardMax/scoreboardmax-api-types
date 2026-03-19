@@ -1629,6 +1629,30 @@ export interface PlayerSummaryResponse {
 }
 
 /**
+ * Possession data for a single period
+ */
+export interface PossessionPeriod {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
+ * Possession period request
+ */
+export interface PossessionPeriodRequest {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
+ * Possession period response
+ */
+export interface PossessionPeriodResponse {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
  * Preferences for tuning AI-generated talking points
  */
 export interface TalkingPointPreferencesRequest {
@@ -1912,6 +1936,8 @@ export interface SoccerSettings extends ScoreboardSettingsBase {
     extraTimeLabel: ExtraTimeLabel;
     hasStoppageTime: boolean;
     hidePenaltyCardAfter: number; 
+    enableEventStats: boolean; 
+    enablePossession: boolean; 
 }
 
 /**
@@ -1981,6 +2007,13 @@ export interface SoccerScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     score: number;
     shootoutResults: (boolean | null)[];
     penaltyCard?: SoccerPenaltyCardRequest;
+    shotsOffTarget: number;
+    shotsOnTarget: number;
+    corners: number;
+    fouls: number;
+    yellowCards: number;
+    redCards: number;
+    possession: boolean;
 }
 
 /**
@@ -1991,6 +2024,13 @@ export interface SoccerScoreboardTeamResponse extends ScoreboardTeamBaseResponse
     shootoutScore: number;
     shootoutResults: (boolean | null)[];
     penaltyCard?: SoccerPenaltyCardResponse;
+    shotsOffTarget: number;
+    shotsOnTarget: number;
+    corners: number;
+    fouls: number;
+    yellowCards: number;
+    redCards: number;
+    possession: boolean;
 }
 
 /**
