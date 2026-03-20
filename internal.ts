@@ -1911,6 +1911,7 @@ export interface SoccerDataRequest {
     team1: SoccerScoreboardTeamRequest;
     team2: SoccerScoreboardTeamRequest;
     settings?: SoccerSettingsRequest;
+    addedStoppageTime: number | null;
 }
 
 /**
@@ -1922,6 +1923,7 @@ export interface SoccerDataResponse {
     team1: SoccerScoreboardTeamResponse;
     team2: SoccerScoreboardTeamResponse;
     settings: SoccerSettingsResponse;
+    addedStoppageTime: number | null;
 }
 
 /**
