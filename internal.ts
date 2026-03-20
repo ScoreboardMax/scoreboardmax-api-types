@@ -1936,6 +1936,7 @@ export interface SoccerSettings extends ScoreboardSettingsBase {
     extraTimeLabel: ExtraTimeLabel;
     hasStoppageTime: boolean;
     hidePenaltyCardAfter: number; 
+    hideSubstitutionAfter: number; 
     enableShotStats: boolean; 
     enablePossession: boolean; 
     isCumulativeClock: boolean;
@@ -2002,6 +2003,22 @@ export interface SoccerSettingsResponse extends SoccerSettings {
 }
 
 /**
+ * Soccer substitution request
+ */
+export interface SoccerSubstitutionRequest {
+    playerIn: PlayerSummaryRequest;
+    playerOut: PlayerSummaryRequest;
+}
+
+/**
+ * Soccer substitution response
+ */
+export interface SoccerSubstitutionResponse {
+    playerIn: PlayerSummaryResponse;
+    playerOut: PlayerSummaryResponse;
+}
+
+/**
  * Soccer team request
  */
 export interface SoccerScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
@@ -2013,6 +2030,7 @@ export interface SoccerScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     yellowCards: number;
     redCards: number;
     possession: boolean;
+    substitution?: SoccerSubstitutionRequest;
 }
 
 /**
@@ -2028,6 +2046,7 @@ export interface SoccerScoreboardTeamResponse extends ScoreboardTeamBaseResponse
     yellowCards: number;
     redCards: number;
     possession: boolean;
+    substitution?: SoccerSubstitutionResponse;
 }
 
 /**
