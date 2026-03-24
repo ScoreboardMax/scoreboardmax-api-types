@@ -1603,6 +1603,30 @@ export interface PlayerSummaryResponse {
 }
 
 /**
+ * Possession data for a single period
+ */
+export interface PossessionPeriod {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
+ * Possession period request
+ */
+export interface PossessionPeriodRequest {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
+ * Possession period response
+ */
+export interface PossessionPeriodResponse {
+    period: SoccerPeriod;
+    clockSeconds: number[];
+}
+
+/**
  * Preferences for tuning AI-generated talking points
  */
 export interface TalkingPointPreferencesRequest {
@@ -1861,6 +1885,7 @@ export interface SoccerDataRequest {
     team1: SoccerScoreboardTeamRequest;
     team2: SoccerScoreboardTeamRequest;
     settings?: SoccerSettingsRequest;
+    addedStoppageTime: number | null;
 }
 
 /**
@@ -1872,6 +1897,7 @@ export interface SoccerDataResponse {
     team1: SoccerScoreboardTeamResponse;
     team2: SoccerScoreboardTeamResponse;
     settings: SoccerSettingsResponse;
+    addedStoppageTime: number | null;
 }
 
 /**
@@ -1886,6 +1912,10 @@ export interface SoccerSettings extends ScoreboardSettingsBase {
     extraTimeLabel: ExtraTimeLabel;
     hasStoppageTime: boolean;
     hidePenaltyCardAfter: number; 
+    hideSubstitutionAfter: number; 
+    enableShotStats: boolean; 
+    enablePossession: boolean; 
+    isCumulativeClock: boolean;
 }
 
 /**
@@ -1949,12 +1979,34 @@ export interface SoccerSettingsResponse extends SoccerSettings {
 }
 
 /**
+ * Soccer substitution request
+ */
+export interface SoccerSubstitutionRequest {
+    playerIn: PlayerSummaryRequest;
+    playerOut: PlayerSummaryRequest;
+}
+
+/**
+ * Soccer substitution response
+ */
+export interface SoccerSubstitutionResponse {
+    playerIn: PlayerSummaryResponse;
+    playerOut: PlayerSummaryResponse;
+}
+
+/**
  * Soccer team request
  */
 export interface SoccerScoreboardTeamRequest extends ScoreboardTeamBaseRequest {
     score: number;
     shootoutResults: (boolean | null)[];
     penaltyCard?: SoccerPenaltyCardRequest;
+    shotsOffTarget: number;
+    shotsOnTarget: number;
+    yellowCards: number;
+    redCards: number;
+    possession: boolean;
+    substitution?: SoccerSubstitutionRequest;
 }
 
 /**
@@ -1965,6 +2017,12 @@ export interface SoccerScoreboardTeamResponse extends ScoreboardTeamBaseResponse
     shootoutScore: number;
     shootoutResults: (boolean | null)[];
     penaltyCard?: SoccerPenaltyCardResponse;
+    shotsOffTarget: number;
+    shotsOnTarget: number;
+    yellowCards: number;
+    redCards: number;
+    possession: boolean;
+    substitution?: SoccerSubstitutionResponse;
 }
 
 /**
