@@ -2454,6 +2454,7 @@ export interface VolleyballSettings extends ScoreboardSettingsBase {
     timeoutsPerSet?: number;
     showTimeouts: boolean;
     showServing: boolean;
+    showSetResults: boolean;
 }
 
 /**
