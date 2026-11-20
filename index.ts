@@ -48,8 +48,10 @@ export interface AccountResponse {
  * AI-generated talking points for a game
  */
 export interface TalkingPointsResponse {
-    /** Each element is a discrete talking point */
+    /** Each element is a discrete talking point (a bullet for "bullets", a paragraph for "conversational") */
     content: string[];
+    /** How the content was written: "bullets" or "conversational". */
+    outputType: TalkingPointOutputType;
     /** When the talking points were generated (ISO 8601) */
     dateCreated: string;
 }
@@ -1243,6 +1245,14 @@ export enum OAuthProvider {
 }
 
 /**
+ * Output type for talking points generation
+ */
+export enum TalkingPointOutputType {
+    Bullets = "bullets",
+    Conversational = "conversational",
+}
+
+/**
  * Overlay creation/update request
  */
 export interface OverlayRequest {
@@ -1638,6 +1648,8 @@ export interface TalkingPointPreferencesRequest {
     energy?: TalkingPointEnergy;
     /** Focus area: "story" for narrative, "balanced" for even coverage, "stats" for statistical analysis. */
     focus?: TalkingPointFocus;
+    /** Output type: "bullets" for short scannable points (default), "conversational" for flowing paragraphs that can be read aloud as-is. */
+    outputType?: TalkingPointOutputType;
 }
 
 /**
