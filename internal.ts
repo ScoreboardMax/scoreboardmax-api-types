@@ -2520,7 +2520,7 @@ export interface UserUpdateRequest {
  * User update request with admin fields
  */
 export interface UserUpdateRequestAdmin extends UserUpdateRequest {
-  isOwner: boolean;
+  isOwner?: boolean;
 }
 
 /**
