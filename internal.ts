@@ -211,7 +211,6 @@ export enum AppType {
  * Auth request with admin fields
  */
 export interface AuthRequestAdmin extends AuthRequest {
-  isAdmin: boolean;
 }
 
 /**
@@ -2520,7 +2519,7 @@ export interface UserUpdateRequest {
  * User update request with admin fields
  */
 export interface UserUpdateRequestAdmin extends UserUpdateRequest {
-  isOwner: boolean;
+  isOwner?: boolean;
 }
 
 /**
